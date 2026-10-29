@@ -1,0 +1,3298 @@
+<!DOCTYPE html>
+<meta charset="UTF-8">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/decimal.js/10.6.0/decimal.min.js"></script>
+
+
+    <header>
+        <h1 class="headline">計算機</h1>
+        <h4>操作方法:　;もしくは+で足し算　-で引き算　：もしくは*で掛け算　/で割り算が可能！<br>ｍを押すと入力中の数を負の数にできます<br>kキーを押すと答え（入力中のものは反映されずにうえに出ている数）が保存されます。Enterで計算を確定
+        <br>試作版の機能:数を入力した後、iキーを押すことで指数を入力可能。<br>※ただし、iキーを押したにcキーを押して、一度空欄にしてください。cキーを押さい場合、例えば 2 → i → 2　と入力すると、画面上には22と表示され、Enterを押すと2²²が出力されてしまうためです。</h4>
+        <br><h4>---不具合の報告---<br>一度指数モードにすると、ページを更新するまで、clearしても、<br>数字を入力して（aとする）、演算記号を入力し、数字を入力して（bとする）結果を出力すると、<br>a^bとなってしまいます。</h4>
+    </header>
+  <div id="number">
+    <div id="number1" class ="number1"style="position:absolute; top:170px; left:730px">
+        <img id="number1" src="1.png", width="150" height="150">
+    </div>
+    <div id="number2" class ="number2" style="position: absolute; top:175px; left:970px">
+        <img id="number2" src="2.png", width="150" height="150">
+    </div>
+    <div id="number3" class ="number3" style="position: absolute; top:195px; left:1230px">
+        <img id="number3" src="3.png", width="105" height="105">
+    </div>
+    <div id="number4" class ="number4" style="position: absolute; top:330px; left:730px">
+      <img id="number4" src="4.png", width="150" height="150">
+    </div>
+    <div id="number5" class ="number5" style="position: absolute; top:330px; left:970px">
+      <img id="number5" src="5.png", width="150" height="150">
+    </div>
+    <div id="number6" class ="number6" style="position: absolute; top:330px; left:1210px">
+      <img id="number6" src="6.png", width="150" height="150">
+    </div>
+    <div id="number7" class ="number7" style="position: absolute; top:545px; left:730px">
+      <img id="number7" src="7.png", width="150" height="150">
+    </div>
+    <div id="number8" class ="number8" style="position: absolute; top:545px; left:970px">
+      <img id="number8" src="8.png", width="150" height="150">
+    </div>
+    <div id="number9" class ="number9" style="position: absolute; top:545px; left:1220px">
+      <img id="number9" src="9.png", width="150" height="150">
+    </div>
+    <div id="number0" class ="number0" style="position: absolute; top:700px; left:970px">
+      <img id="number0" src="0.png", width="150" height="150">
+    </div>
+  </div>
+  <div class="thisnumminus">
+    <button  style="position: absolute; top:210px; left:300px">入力中の数を負の数にする</button>
+  </div>
+  <div class="minus"style="position: absolute; top:320px; left:1345px">
+    <font size="10000">➖️</font>
+  </div>
+  <div class="plus" style="position: absolute; top:420px; left:1345px">
+    <font size="10000">➕️</font>
+  </div>
+  <div class="multiplication" class="multiplication"style="position: absolute; top195px; left:1355px">
+    <font size="10000">✖</font>
+  </div>
+   
+  </div>
+  <div class="divide"style="position: absolute; top:90px; left:1340px">
+    <font size="10000">➗️</font>
+  </div>
+  <div class="equal"style="position: absolute; top:600px; left: 1355px">
+    <font size="100000">＝</font>
+  </div>
+  <div class="decimalpoint" style="position: absolute; top:780px; left:1270px">
+    <font size="100000">・</font>
+  </div>
+  <div class="sqrt" style="position: absolute; top: 80px; left:1260px">
+    <font size="100000">√</font>
+  </div>
+  <div class="relatednum" >
+  <br>
+  <p><span id="relatednum" class="notnum"></span></p>
+  <p><span id="relatednum" class="notnumalert"></span></p>
+  <p><span id="relatednum" class="beforenum"></span></p>
+  <p><br><br><br><span id="relatednum" class="nownum"></span></p>
+  <p><span id="relatednum" class="computeResult"></span></p>
+  </div>
+  <script src="decimal.js"></script>
+    <script>
+const nownum = document.querySelector(".nownum");
+  const beforenum = document.querySelector(".beforenum");
+  const Innotnum = document.querySelector(".notnum");
+  const notnumalert = document.querySelector(".notnumalert");
+  const Resultin = document.querySelector(".computeResult");
+
+  const btn1 = document.getElementById("number1");
+  const btn2 = document.getElementById("number2");
+  const btn3 = document.getElementById("number3");
+  const btn4 = document.getElementById("number4");
+  const btn5 = document.getElementById("number5");
+  const btn6 = document.getElementById("number6");
+  const btn7 = document.getElementById("number7");
+  const btn8 = document.getElementById("number8");
+  const btn9 = document.getElementById("number9");
+  const btn0 = document.getElementById("number0");
+  const btnplus = document.getElementById("plus");
+  const btnminus = document.getElementById("minus");
+  const btnmultiplication = document.getElementById("multiplication");
+  const btndivide = document.getElementById("divide");
+  const btnequal = document.getElementById("equal");
+  const btnthisnumminus = document.getElementById("thisnumminus");
+  const btnsqrt = document.getElementById("sqrt");
+  const btndecimal = document.getElementById("decimalpoint");
+  var IndexMode = false;
+  var IndexNumber = undefined;
+
+  var d1,d2,d3,d4,d5,d6,d7,d8;
+  var innumArray = [];
+  var computeMethodArray = [];
+  var Informula = "";
+  var keepformula = "";
+  let nowAnswer = undefined;
+  let keepbeforeans = undefined;
+  let clearnow,clearall;
+  var notnum;
+  var computeMethod;
+  var keepcompMethod;
+  var computeResult = 0;
+  var ifresult = false;
+  var keepresult = undefined;
+  var thisnumberminus = false;
+  var thisnumbersqrt = false;
+  var thisnumdecimalpoint = "";
+  var normalnumin = true;
+  var karisiki;
+  var nowAnswertoNumber;
+  var nowAnswerString;
+  let notinbeforeEnter = false;
+  function clear()
+  {
+          d1 = undefined;
+          d2 = undefined;
+          d3 = undefined;
+          d4 = undefined;
+          d5 = undefined;
+          d6 = undefined;
+          d7 = undefined;
+          d8 = undefined;
+          innumArray[innumArray.length-1] = undefined;
+          Informula = "";
+  }
+  clear();
+  nownum.innerHTML = 0;          
+  function render(){
+          if(d1 !== undefined && d2 === undefined)
+          {
+            if(thisnumdecimalpoint === "notinNum")
+            {
+              normalnumin = false;
+              if(Informula === "")
+              {
+                nowAnswer = d1.mul("0.1");
+                nownum.innerHTML = nowAnswer;
+              }
+              else
+              {
+              nowAnswer = d1.mul("0.1");
+              nownum.innerHTML = Informula + nowAnswer;
+              }
+            }
+            else if(thisnumdecimalpoint === "afterd1")
+            {
+              normalnumin = false;
+              if(Informula === ""){
+              nowAnswer = d1 + ".";
+              nownum.innerHTML = nowAnswer;
+              }
+              else{
+              nowAnswer = d1 + ".";
+              nownum.innerHTML = Informula + nowAnswer;
+              }
+            }
+            else
+            {
+              if(Informula === ""){
+              nowAnswer = d1;
+              nownum.innerHTML = nowAnswer;
+              }
+              else{
+              nowAnswer = d1;
+              nownum.innerHTML = Informula + nowAnswer;
+              }
+            }
+            if(thisnumberminus)
+            {
+              normalnumin = false;
+              
+              nownum.innerHTML =Informula +  "-" + nowAnswer;
+            }
+            if(thisnumbersqrt)
+            {
+              normalnumin = false;
+
+              nownum.innerHTML =Informula +  "√" + nowAnswer;
+            }
+            if(normalnumin)
+            {
+              if(Informula === ""){
+              nowAnswer = d1;
+              nownum.innerHTML = nowAnswer;
+              }
+              else{
+              nowAnswer = d1;
+              nownum.innerHTML = Informula + nowAnswer;
+              }
+            }
+            
+          }
+          if(d2 !== undefined && d3 === undefined)
+          {
+            if(thisnumdecimalpoint === "notinNum")
+            {
+              normalnumin = true;
+              if(Informula === ""){
+              nowAnswer = d1.mul("0.01").add(d2.mul("0.1"));
+              nownum.innerHTML = nowAnswer;
+              }
+              else{
+              nowAnswer = d1.mul("0.01").add(d2.mul("0.1"));
+              nownum.innerHTML = Informula + nowAnswer;
+              }
+            }
+            else if(thisnumdecimalpoint === "afterd1")
+            {
+              normalnumin = true;
+              if(Informula === ""){
+              nowAnswer = d1.add(d2.mul("0.1"));
+              nownum.innerHTML = nowAnswer;
+              }
+              else{
+              nowAnswer = d1.add(d2.mul("0.1"));
+              nownum.innerHTML = Informula + nowAnswer;
+              }
+            }
+            else if(thisnumdecimalpoint === "afterd2")
+            {
+              normalnumin = false;
+              if(Informula === ""){
+              nowAnswer = d1.mul("10").add(d2);
+              nownum.innerHTML = nowAnswer + ".";
+              }
+              else{
+              nowAnswer = d1.mul("10").add(d2);
+              nownum.innerHTML = Informula + nowAnswer + ".";
+              }
+            }
+            else
+            {
+              if(Informula === ""){
+              nowAnswer = d1.mul("10").add(d2);
+              nownum.innerHTML = nowAnswer;
+              }
+              else{
+              nowAnswer = d1.mul("10").add(d2);
+              nownum.innerHTML = Informula + nowAnswer;
+              }
+            }
+            
+            if(thisnumberminus)
+            {
+              normalnumin = false;
+              nownum.innerHTML =Informula +  "-" + nowAnswer;
+            }
+            if(thisnumbersqrt)
+            {
+              normalnumin = false;
+              nownum.innerHTML =Informula +  "√" + nowAnswer;
+            }
+            if(normalnumin)
+            {
+              if(Informula === ""){
+              nowAnswer = d1.mul("10").add(d2);
+              nownum.innerHTML = nowAnswer;
+              }
+              else{
+              nowAnswer = d1.mul("10").add(d2);
+              nownum.innerHTML = Informula + nowAnswer;
+              }
+            }
+          }
+          if(d3 !== undefined && d4 === undefined)
+          {            
+            if(thisnumdecimalpoint === "notinNum")
+            {
+              normalnumin = true;
+              if(Informula === ""){
+              nowAnswer = d1.mul("0.1").add(d2.mul("0.01")).add(d3.mul("0.001"));
+                nownum.innerHTML = nowAnswer;
+              }
+              else
+              {
+                nowAnswer = d1.mul("0.1").add(d2.mul("0.01")).add(d3.mul("0.001"));
+                nownum.innerHTML = Informula + nowAnswer;
+              }
+            }
+            else if(thisnumdecimalpoint === "afterd1")
+            {
+              normalnumin = true;
+              if(Informula === ""){
+              nowAnswer = d1.add(d2.mul("0.1")).add(d3.mul("0.01"));
+              nownum.innerHTML = nowAnswer;
+              }
+              else{
+                nowAnswer = d1.add(d2.mul("0.1")).add(d3.mul("0.01"));
+                nownum.innerHTML = Informula + nowAnswer;
+              }
+            }
+            else if(thisnumdecimalpoint === "afterd2")
+            {
+              normalnumin = true;
+              if(Informula === ""){
+              nowAnswer = d1.mul("10").add(d2).add(d3.mul("0.1"));
+              nownum.innerHTML = nowAnswer;
+              }
+              else{
+                nowAnswer = d1.mul("10").add(d2).add(d3.mul("0.1"));
+              nownum.innerHTML = Informula + nowAnswer;
+              }
+            }
+            else if(thisnumdecimalpoint === "afterd3")
+            {
+              normalnumin = false;
+              if(Informula === ""){
+                nowAnswer = d1.mul("100").add(d2.mul("10").add(d3)); 
+                nownum.innerHTML = nowAnswer + ".";
+              }
+              else{
+                nowAnswer = d1.mul("100").add(d2.mul("10").add(d3)); 
+                nownum.innerHTML = Informula + nowAnswer + ".";
+              }
+            }
+            else
+            {
+              if(Informula === ""){
+             nowAnswer = d1.mul("100").add(d2.mul("10").add(d3));
+             nownum.innerHTML = nowAnswer;
+              }
+              else{
+                nowAnswer = d1.mul("100").add(d2.mul("10").add(d3));
+                nownum.innerHTML = Informula + nowAnswer;
+              } 
+            }
+            
+            if(thisnumberminus)
+            {
+              normalnumin = false;
+              nownum.innerHTML =Informula +  "-" + nowAnswer;
+            }
+            if(thisnumbersqrt)
+            {
+              normalnumin = false;
+              nownum.innerHTML =Informula +  "√" + nowAnswer;
+            }
+            if(normalnumin)
+            {
+              if(Informula === ""){
+             nowAnswer = d1.mul("100").add(d2.mul("10").add(d3));
+             nownum.innerHTML = nowAnswer;
+              }
+              else{
+                nowAnswer = d1.mul("100").add(d2.mul("10").add(d3));
+                nownum.innerHTML = Informula + nowAnswer;
+              }
+            }
+          }
+          if(d4 !== undefined && d5 === undefined)
+          {
+            if(thisnumdecimalpoint === "notinNum")
+            {
+              normalnumin = true;
+              if(Informula === ""){
+              nowAnswer = d1.mul("0.1").add(d2.mul("0.01")).add(d3.mul("0.001")).add(d4.mul("0.0001"));
+                nownum.innerHTML = nowAnswer;
+              }
+              else
+              {
+                nowAnswer = d1.mul("0.1").add(d2.mul("0.01")).add(d3.mul("0.001")).add(d4.mul("0.0001"));
+                nownum.innerHTML = Informula + nowAnswer;
+              }
+            }
+            else if(thisnumdecimalpoint === "afterd1")
+            {
+              normalnumin = true;
+              if(Informula === ""){
+              nowAnswer = d1.add(d2.mul("0.1")).add(d3.mul("0.01")).add(d4.mul("0.001"));
+              nownum.innerHTML = nowAnswer;
+              }
+              else{
+                nowAnswer = d1.add(d2.mul("0.1")).add(d3.mul("0.01")).add(d4.mul("0.001"));
+                nownum.innerHTML = Informula + nowAnswer;
+              }
+            }
+            else if(thisnumdecimalpoint === "afterd2")
+            {
+              normalnumin = true;
+              if(Informula === ""){
+              nowAnswer = d1.mul("10").add(d2).add(d3.mul("0.1")).add(d4.mul("0.01"));
+              nownum.innerHTML = nowAnswer;
+              }
+              else{
+                nowAnswer = d1.mul("10").add(d2).add(d3.mul("0.1")).add(d4.mul("0.01"));
+              nownum.innerHTML = Informula + nowAnswer;
+              }
+            }
+            else if(thisnumdecimalpoint === "afterd3")
+            {
+              normalnumin = true;
+              if(Informula === ""){
+                nowAnswer = d1.mul("100").add(d2.mul("10").add(d3)).add(d4.mul("0.1"));
+                nownum.innerHTML = nowAnswer;
+              }
+              else{
+                nowAnswer = d1.mul("100").add(d2.mul("10").add(d3)).add(d4.mul("0.1"));
+                nownum.innerHTML = Informula + nowAnswer;
+              }
+            }
+            else if(thisnumdecimalpoint === "afterd4")
+            {
+              normalnumin = false;
+              if(Informula === ""){
+                nowAnswer = d1.mul("1000").add(d2.mul("100")).add(d3.mul("10")).add(d4);
+                nownum.innerHTML = nowAnswer + ".";
+              }
+              else{
+                nowAnswer = d1.mul("1000").add(d2.mul("100")).add(d3.mul("10")).add(d4);
+                nownum.innerHTML = Informula + nowAnswer + ".";
+              }
+            }
+            else
+            {
+              if(Informula === ""){
+             nowAnswer = d1.mul("1000").add(d2.mul("100")).add(d3.mul("10")).add(d4);
+             nownum.innerHTML = nowAnswer;
+              }
+              else{
+                nowAnswer = d1.mul("1000").add(d2.mul("100")).add(d3.mul("10")).add(d4);
+                nownum.innerHTML = Informula + nowAnswer;
+              }
+            }
+            
+            if(thisnumberminus)
+            {
+              normalnumin = false;
+              nownum.innerHTML =Informula +  "-" + nowAnswer;
+            }
+            if(thisnumbersqrt)
+            {
+              normalnumin = false;
+              nownum.innerHTML =Informula +  "√" + nowAnswer;
+            }
+            if(normalnumin)
+            {
+            if(Informula === ""){
+             nowAnswer = d1.mul("1000").add(d2.mul("100")).add(d3.mul("10")).add(d4);
+             nownum.innerHTML = nowAnswer;
+              }
+              else{
+                nowAnswer = d1.mul("1000").add(d2.mul("100")).add(d3.mul("10")).add(d4);
+                nownum.innerHTML = Informula + nowAnswer;
+              }
+            }
+          }
+          if(d5 !== undefined && d6 === undefined)
+          {
+            if(thisnumdecimalpoint === "notinNum")
+            {
+              normalnumin = true;
+              if(Informula === ""){
+              nowAnswer = d1.mul("0.1").add(d2.mul("0.01")).add(d3.mul("0.001")).add(d4.mul("0.0001")).add(d5.mul("0.00001"));
+                nownum.innerHTML = nowAnswer;
+              }
+              else
+              {
+                nowAnswer = d1.mul("0.1").add(d2.mul("0.01")).add(d3.mul("0.001")).add(d4.mul("0.0001")).add(d5.mul("0.00001"));
+                nownum.innerHTML = Informula + nowAnswer;
+              }
+            }
+            else if(thisnumdecimalpoint === "afterd1")
+            {
+              normalnumin = true;
+              if(Informula === ""){
+              nowAnswer = d1.add(d2.mul("0.1")).add(d3.mul("0.01")).add(d4.mul("0.001")).add(d5.mul("0.0001"));
+              nownum.innerHTML = nowAnswer;
+              }
+              else{
+                nowAnswer = d1.add(d2.mul("0.1")).add(d3.mul("0.01")).add(d4.mul("0.001")).add(d5.mul("0.0001"));
+                nownum.innerHTML = Informula + nowAnswer;
+              }
+            }
+            else if(thisnumdecimalpoint === "afterd2")
+            {
+              normalnumin = true;
+              if(Informula === ""){
+              nowAnswer = d1.mul("10").add(d2).add(d3.mul("0.1")).add(d4.mul("0.01")).add(d5.mul("0.001"));
+              nownum.innerHTML = nowAnswer;
+              }
+              else{
+                nowAnswer = d1.mul("10").add(d2).add(d3.mul("0.1")).add(d4.mul("0.01")).add(d5.mul("0.001"));
+              nownum.innerHTML = Informula + nowAnswer;
+              }
+            }
+            else if(thisnumdecimalpoint === "afterd3")
+            {
+              normalnumin = true;
+              if(Informula === ""){
+                nowAnswer = d1.mul("100").add(d2.mul("10").add(d3)).add(d4.mul("0.1")).add(d5.mul("0.01"));
+                nownum.innerHTML = nowAnswer;
+              }
+              else{
+                nowAnswer = d1.mul("100").add(d2.mul("10").add(d3)).add(d4.mul("0.1")).add(d5.mul("0.01"));
+                nownum.innerHTML = Informula + nowAnswer;
+              }
+            }
+            else if(thisnumdecimalpoint === "afterd4")
+            {
+              normalnumin = true;
+              if(Informula === ""){
+                nowAnswer = d1.mul("1000").add(d2.mul("100")).add(d3.mul("10")).add(d4).add(d5.mul("0.1"));
+                nownum.innerHTML = nowAnswer;
+              }
+              else{
+                nowAnswer = d1.mul("1000").add(d2.mul("100")).add(d3.mul("10")).add(d4).add(d5.mul("0.1"));
+                nownum.innerHTML = Informula + nowAnswer;
+              }
+            }
+            else if(thisnumdecimalpoint === "afterd5")
+            {
+              normalnumin = false;
+              if(Informula === ""){
+                nowAnswer = d1.mul("10000").add(d2.mul("1000")).add(d3.mul("100")).add(d4.mul("10")).add(d5);
+                nownum.innerHTML = nowAnswer + ".";
+              }
+              else{
+                nowAnswer = d1.mul("10000").add(d2.mul("1000")).add(d3.mul("100")).add(d4.mul("10")).add(d5);
+                nownum.innerHTML = Informula + nowAnswer + ".";
+              }
+            }
+            else
+            {
+              if(Informula === ""){
+             nowAnswer = d1.mul("10000").add(d2.mul("1000")).add(d3.mul("100")).add(d4.mul("10")).add(d5);
+             nownum.innerHTML = nowAnswer;
+              }
+              else{
+                nowAnswer = d1.mul("10000").add(d2.mul("1000")).add(d3.mul("100")).add(d4.mul("10")).add(d5);
+                nownum.innerHTML = Informula + nowAnswer;
+              }
+            }
+            
+            if(thisnumberminus)
+            {
+              normalnumin = false;
+              nownum.innerHTML =Informula +  "-" + nowAnswer;
+            }
+            if(thisnumbersqrt)
+            {
+              normalnumin = false;
+              nownum.innerHTML =Informula +  "√" + nowAnswer;
+            }
+            if(normalnumin)
+            {
+            if(Informula === ""){
+             nowAnswer = d1.mul("10000").add(d2.mul("1000")).add(d3.mul("100")).add(d4.mul("10")).add(d5);
+             nownum.innerHTML = nowAnswer;
+              }
+              else{
+                nowAnswer = d1.mul("10000").add(d2.mul("1000")).add(d3.mul("100")).add(d4.mul("10")).add(d5);
+                nownum.innerHTML = Informula + nowAnswer;
+              }
+            }
+          }
+          if(d6 !== undefined && d7 === undefined)
+          {
+            if(thisnumdecimalpoint === "notinNum")
+            {
+              normalnumin = true;
+              if(Informula === ""){
+              nowAnswer = d1.mul("0.1").add(d2.mul("0.01")).add(d3.mul("0.001")).add(d4.mul("0.0001")).add(d5.mul("0.00001")).add(d6.mul("0.000001"));
+                nownum.innerHTML = nowAnswer;
+              }
+              else
+              {
+                nowAnswer = d1.mul("0.1").add(d2.mul("0.01")).add(d3.mul("0.001")).add(d4.mul("0.0001")).add(d5.mul("0.00001")).add(d6.mul("0.000001"));
+                nownum.innerHTML = Informula + nowAnswer;
+              }
+            }
+            else if(thisnumdecimalpoint === "afterd1")
+            {
+              normalnumin = true;
+              if(Informula === ""){
+              nowAnswer = d1.add(d2.mul("0.1")).add(d3.mul("0.01")).add(d4.mul("0.001")).add(d5.mul("0.0001")).add(d6.mul("0.00001"));
+              nownum.innerHTML = nowAnswer;
+              }
+              else{
+                nowAnswer = d1.add(d2.mul("0.1")).add(d3.mul("0.01")).add(d4.mul("0.001")).add(d5.mul("0.0001")).add(d6.mul("0.00001"));
+                nownum.innerHTML = Informula + nowAnswer;
+              }
+            }
+            else if(thisnumdecimalpoint === "afterd2")
+            {
+              normalnumin = true;
+              if(Informula === ""){
+              nowAnswer = d1.mul("10").add(d2).add(d3.mul("0.1")).add(d4.mul("0.01")).add(d5.mul("0.001")).add(d6.mul("0.0001"));
+              nownum.innerHTML = nowAnswer;
+              }
+              else{
+                nowAnswer = d1.mul("10").add(d2).add(d3.mul("0.1")).add(d4.mul("0.01")).add(d5.mul("0.001")).add(d6.mul("0.0001"));
+              nownum.innerHTML = Informula + nowAnswer;
+              }
+            }
+            else if(thisnumdecimalpoint === "afterd3")
+            {
+              normalnumin = true;
+              if(Informula === ""){
+                nowAnswer = d1.mul("100").add(d2.mul("10").add(d3)).add(d4.mul("0.1")).add(d5.mul("0.01")).add(d6.mul("0.001"));
+                nownum.innerHTML = nowAnswer;
+              }
+              else{
+                nowAnswer = d1.mul("100").add(d2.mul("10").add(d3)).add(d4.mul("0.1")).add(d5.mul("0.01")).add(d6.mul("0.001"));
+                nownum.innerHTML = Informula + nowAnswer;
+              }
+            }
+            else if(thisnumdecimalpoint === "afterd4")
+            {
+              normalnumin = true;
+              if(Informula === ""){
+                nowAnswer = d1.mul("1000").add(d2.mul("100")).add(d3.mul("10")).add(d4).add(d5.mul("0.1")).add(d6.mul("0.01"));
+                nownum.innerHTML = nowAnswer;
+              }
+              else{
+                nowAnswer = d1.mul("1000").add(d2.mul("100")).add(d3.mul("10")).add(d4).add(d5.mul("0.1")).add(d6.mul("0.01"));
+                nownum.innerHTML = Informula + nowAnswer;
+              }
+            }
+            else if(thisnumdecimalpoint === "afterd5")
+            {
+              normalnumin = true;
+              if(Informula === ""){
+                nowAnswer = d1.mul("10000").add(d2.mul("1000")).add(d3.mul("100")).add(d4.mul("10")).add(d5).add(d6.mul("0.1"));
+                nownum.innerHTML = nowAnswer;
+              }
+              else{
+                nowAnswer = d1.mul("10000").add(d2.mul("1000")).add(d3.mul("100")).add(d4.mul("10")).add(d5).add(d6.mul("0.1"));
+                nownum.innerHTML = Informula + nowAnswer;
+              }
+            }
+            else if(thisnumdecimalpoint === "afterd6")
+            {
+              normalnumin = false;
+              if(Informula === ""){
+                nowAnswer = d1.mul("100000").add(d2.mul("10000")).add(d3.mul("1000")).add(d4.mul("100")).add(d5.mul("10")).add(d6);
+                nownum.innerHTML = nowAnswer + ".";
+              }
+              else{
+                nowAnswer = d1.mul("100000").add(d2.mul("10000")).add(d3.mul("1000")).add(d4.mul("100")).add(d5.mul("10")).add(d6);
+                nownum.innerHTML = Informula + nowAnswer + ".";
+              }
+            }
+            else
+            {
+              if(Informula === ""){
+                nowAnswer = d1.mul("100000").add(d2.mul("10000")).add(d3.mul("1000")).add(d4.mul("100")).add(d5.mul("10")).add(d6);
+                nownum.innerHTML = nowAnswer;
+              }
+              else{
+                nowAnswer = d1.mul("100000").add(d2.mul("10000")).add(d3.mul("1000")).add(d4.mul("100")).add(d5.mul("10")).add(d6);
+                nownum.innerHTML = Informula + nowAnswer;
+              }   
+            }
+
+            if(thisnumberminus)
+            {
+              normalnumin = false;
+              nownum.innerHTML =Informula +  "-" + nowAnswer;
+            }
+            if(thisnumbersqrt)
+            {
+              normalnumin = false;
+              nownum.innerHTML =Informula +  "√" + nowAnswer;
+            }
+            if(normalnumin)
+            {
+              if(Informula === ""){
+                nowAnswer = d1.mul("100000").add(d2.mul("10000")).add(d3.mul("1000")).add(d4.mul("100")).add(d5.mul("10")).add(d6);
+                nownum.innerHTML = nowAnswer;
+              }
+              else{
+                nowAnswer = d1.mul("100000").add(d2.mul("10000")).add(d3.mul("1000")).add(d4.mul("100")).add(d5.mul("10")).add(d6);
+                nownum.innerHTML = Informula + nowAnswer;
+              }   
+            }
+          }
+          if(d7 !== undefined && d8 === undefined)
+          {            
+            if(thisnumdecimalpoint === "notinNum")
+            {
+              normalnumin = true;
+              if(Informula === ""){
+                nowAnswer = d1.mul("0.1").add(d2.mul("0.01")).add(d3.mul("0.001")).add(d4.mul("0.0001")).add(d5.mul("0.00001")).add(d6.mul("0.000001")).add(d7.mul("0.0000001"));
+                nownum.innerHTML = nowAnswer;
+              }
+              else
+              {
+                nowAnswer = d1.mul("0.1").add(d2.mul("0.01")).add(d3.mul("0.001")).add(d4.mul("0.0001")).add(d5.mul("0.00001")).add(d6.mul("0.000001")).add(d7.mul("0.0000001"));
+                nownum.innerHTML = Informula + nowAnswer;
+              }
+            }
+            else if(thisnumdecimalpoint === "afterd1")
+            {
+              normalnumin = true;
+              if(Informula === ""){
+                nowAnswer = d1.add(d2.mul("0.1")).add(d3.mul("0.01")).add(d4.mul("0.001")).add(d5.mul("0.0001")).add(d6.mul("0.00001")).add(d7.mul("0.000001"));
+                nownum.innerHTML = nowAnswer;
+              }
+              else
+              {
+                nowAnswer = d1.add(d2.mul("0.1")).add(d3.mul("0.01")).add(d4.mul("0.001")).add(d5.mul("0.0001")).add(d6.mul("0.00001")).add(d7.mul("0.000001"));
+                nownum.innerHTML = Informula + nowAnswer;
+              }
+            }
+            else if(thisnumdecimalpoint === "afterd2")
+            {
+              normalnumin = true;
+              if(Informula === ""){
+                nowAnswer = d1.mul("10").add(d2).add(d3.mul("0.1")).add(d4.mul("0.01")).add(d5.mul("0.001")).add(d6.mul("0.0001")).add(d7.mul("0.00001"));
+                nownum.innerHTML = nowAnswer;
+              }
+              else
+              {
+                nowAnswer = d1.mul("10").add(d2).add(d3.mul("0.1")).add(d4.mul("0.01")).add(d5.mul("0.001")).add(d6.mul("0.0001")).add(d7.mul("0.00001"));
+                nownum.innerHTML = Informula + nowAnswer;
+              }
+            }
+            else if(thisnumdecimalpoint === "afterd3")
+            {
+              normalnumin = true;
+              if(Informula === ""){
+                nowAnswer = d1.mul("100").add(d2.mul("10").add(d3)).add(d4.mul("0.1")).add(d5.mul("0.01")).add(d6.mul("0.001")).add(d7.mul("0.0001"));
+                nownum.innerHTML = nowAnswer;
+              }
+              else
+              {
+                nowAnswer = d1.mul("100").add(d2.mul("10").add(d3)).add(d4.mul("0.1")).add(d5.mul("0.01")).add(d6.mul("0.001")).add(d7.mul("0.0001"));
+                nownum.innerHTML = Informula + nowAnswer;
+              }
+            }
+            else if(thisnumdecimalpoint === "afterd4")
+            {
+              normalnumin = true;
+              if(Informula === ""){
+                nowAnswer = d1.mul("1000").add(d2.mul("100")).add(d3.mul("10")).add(d4).add(d5.mul("0.1")).add(d6.mul("0.01")).add(d7.mul("0.001"));
+                nownum.innerHTML = nowAnswer;
+              }
+              else
+              {
+                nowAnswer = d1.mul("1000").add(d2.mul("100")).add(d3.mul("10")).add(d4).add(d5.mul("0.1")).add(d6.mul("0.01")).add(d7.mul("0.001"));
+                nownum.innerHTML = Informula + nowAnswer;
+              }
+            }
+            else if(thisnumdecimalpoint === "afterd5")
+            {
+              normalnumin = true;
+              if(Informula === ""){
+                nowAnswer = d1.mul("10000").add(d2.mul("1000")).add(d3.mul("100")).add(d4.mul("10")).add(d5).add(d6.mul("0.1")).add(d7.mul("0.01"));
+                nownum.innerHTML = nowAnswer;
+              }
+              else
+              {
+                nowAnswer = d1.mul("10000").add(d2.mul("1000")).add(d3.mul("100")).add(d4.mul("10")).add(d5).add(d6.mul("0.1")).add(d7.mul("0.01"));
+                nownum.innerHTML = Informula + nowAnswer;
+              }
+            }
+            else if(thisnumdecimalpoint === "afterd6")
+            {
+              normalnumin = true;
+              if(Informula === ""){
+                nowAnswer = d1.mul("100000").add(d2.mul("10000")).add(d3.mul("1000")).add(d4.mul("100")).add(d5.mul("10")).add(d6).add(d7.mul("0.1"));
+                nownum.innerHTML = nowAnswer;
+              }
+              else
+              {
+                nowAnswer = d1.mul("100000").add(d2.mul("10000")).add(d3.mul("1000")).add(d4.mul("100")).add(d5.mul("10")).add(d6).add(d7.mul("0.1"));
+                nownum.innerHTML = Informula + nowAnswer;
+              }
+            }
+            else if(thisnumdecimalpoint === "afterd7")
+            {
+              normalnumin = false;
+              if(Informula === ""){
+                nowAnswer = d1.mul("1000000").add(d2.mul("100000")).add(d3.mul("10000")).add(d4.mul("1000")).add(d5.mul("100")).add(d6.mul("10")).add(d7);
+                nownum.innerHTML = nowAnswer +".";
+              }
+              else
+              {
+                nowAnswer = d1.mul("1000000").add(d2.mul("100000")).add(d3.mul("10000")).add(d4.mul("1000")).add(d5.mul("100")).add(d6.mul("10")).add(d7);
+                nownum.innerHTML = Informula + nowAnswer +".";
+              }
+            }
+            else
+            {
+              if(Informula === ""){
+                nowAnswer = d1.mul("1000000").add(d2.mul("100000")).add(d3.mul("10000")).add(d4.mul("1000")).add(d5.mul("100")).add(d6.mul("10")).add(d7);
+                nownum.innerHTML = nowAnswer;
+              }
+              else
+              {
+                nowAnswer = d1.mul("1000000").add(d2.mul("100000")).add(d3.mul("10000")).add(d4.mul("1000")).add(d5.mul("100")).add(d6.mul("10")).add(d7);
+                nownum.innerHTML = Informula + nowAnswer;
+              }
+            }
+            
+            if(thisnumberminus)
+            {
+              normalnumin = false;
+              nownum.innerHTML =Informula +  "-" + nowAnswer;
+            }
+            if(thisnumbersqrt)
+            {
+              normalnumin = false;
+              nownum.innerHTML =Informula +  "√" + nowAnswer;
+            }
+            if(normalnumin)
+            {
+              if(Informula === ""){
+                nowAnswer = d1.mul("1000000").add(d2.mul("100000")).add(d3.mul("10000")).add(d4.mul("1000")).add(d5.mul("100")).add(d6.mul("10")).add(d7);
+                nownum.innerHTML = nowAnswer;
+              }
+              else
+              {
+                nowAnswer = d1.mul("1000000").add(d2.mul("100000")).add(d3.mul("10000")).add(d4.mul("1000")).add(d5.mul("100")).add(d6.mul("10")).add(d7);
+                nownum.innerHTML = Informula + nowAnswer;
+              }
+            }
+          }
+          if(d8 !== undefined)
+          {
+            if(thisnumdecimalpoint === "notinNum")
+            {
+              normalnumin = true;
+              if(Informula === ""){
+                nowAnswer = d1.mul("0.1").add(d2.mul("0.01")).add(d3.mul("0.001")).add(d4.mul("0.0001")).add(d5.mul("0.00001")).add(d6.mul("0.000001")).add(d7.mul("0.0000001")).add(d8.mul("0.00000001"));
+                nownum.innerHTML = nowAnswer;
+              }
+              else
+              {
+                nowAnswer = d1.mul("0.1").add(d2.mul("0.01")).add(d3.mul("0.001")).add(d4.mul("0.0001")).add(d5.mul("0.00001")).add(d6.mul("0.000001")).add(d7.mul("0.0000001")).add(d8.mul("0.00000001"));
+                nownum.innerHTML = Informula + nowAnswer;
+              }
+            }
+            else if(thisnumdecimalpoint === "afterd1")
+            {
+              normalnumin = true;
+              if(Informula === ""){
+                nowAnswer = d1.add(d2.mul("0.1")).add(d3.mul("0.01")).add(d4.mul("0.001")).add(d5.mul("0.0001")).add(d6.mul("0.00001")).add(d7.mul("0.000001")).add(d8.mul("0.0000001"));
+                nownum.innerHTML = nowAnswer;
+              }
+              else
+              {
+                nowAnswer = d1.add(d2.mul("0.1")).add(d3.mul("0.01")).add(d4.mul("0.001")).add(d5.mul("0.0001")).add(d6.mul("0.00001")).add(d7.mul("0.000001")).add(d8.mul("0.0000001"));
+                nownum.innerHTML = Informula + nowAnswer;
+              }
+            }
+            else if(thisnumdecimalpoint === "afterd2")
+            {
+              normalnumin = true;
+              if(Informula === ""){
+                nowAnswer = d1.mul("10").add(d2).add(d3.mul("0.1")).add(d4.mul("0.01")).add(d5.mul("0.001")).add(d6.mul("0.0001")).add(d7.mul("0.00001")).add(d8.mul("0.000001"));
+                nownum.innerHTML = nowAnswer;
+              }
+              else
+              {
+                nowAnswer = d1.mul("10").add(d2).add(d3.mul("0.1")).add(d4.mul("0.01")).add(d5.mul("0.001")).add(d6.mul("0.0001")).add(d7.mul("0.00001")).add(d8.mul("0.000001"));
+                nownum.innerHTML = Informula + nowAnswer;
+              }
+            }
+            else if(thisnumdecimalpoint === "afterd3")
+            {
+              normalnumin = true;
+              if(Informula === ""){
+                nowAnswer = d1.mul("100").add(d2.mul("10").add(d3)).add(d4.mul("0.1")).add(d5.mul("0.01")).add(d6.mul("0.001")).add(d7.mul("0.0001")).add(d8.mul("0.00001"));
+                nownum.innerHTML = nowAnswer;
+              }
+              else
+              {
+                nowAnswer = d1.mul("100").add(d2.mul("10").add(d3)).add(d4.mul("0.1")).add(d5.mul("0.01")).add(d6.mul("0.001")).add(d7.mul("0.0001")).add(d8.mul("0.00001"));
+                nownum.innerHTML = Informula + nowAnswer;
+              }
+            }
+            else if(thisnumdecimalpoint === "afterd4")
+            {
+              normalnumin = true;
+              if(Informula === ""){
+                nowAnswer = d1.mul("1000").add(d2.mul("100")).add(d3.mul("10")).add(d4).add(d5.mul("0.1")).add(d6.mul("0.01")).add(d7.mul("0.001")).add(d8.mul("0.0001"));
+                nownum.innerHTML = nowAnswer;
+              }
+              else
+              {
+                nowAnswer = d1.mul("1000").add(d2.mul("100")).add(d3.mul("10")).add(d4).add(d5.mul("0.1")).add(d6.mul("0.01")).add(d7.mul("0.001")).add(d8.mul("0.0001"));
+                nownum.innerHTML = Informula + nowAnswer;
+              }
+            }
+            else if(thisnumdecimalpoint === "afterd5")
+            {
+              normalnumin = true;
+              if(Informula === ""){
+                nowAnswer = d1.mul("10000").add(d2.mul("1000")).add(d3.mul("100")).add(d4.mul("10")).add(d5).add(d6.mul("0.1")).add(d7.mul("0.01")).add(d8.mul("0.001"));
+                nownum.innerHTML = nowAnswer;
+              }
+              else
+              {
+                nowAnswer = d1.mul("10000").add(d2.mul("1000")).add(d3.mul("100")).add(d4.mul("10")).add(d5).add(d6.mul("0.1")).add(d7.mul("0.01")).add(d8.mul("0.001"));
+                nownum.innerHTML = Informula + nowAnswer;
+              }
+            }
+            else if(thisnumdecimalpoint === "afterd6")
+            {
+              normalnumin = true;
+              if(Informula === ""){
+                nowAnswer = d1.mul("100000").add(d2.mul("10000")).add(d3.mul("1000")).add(d4.mul("100")).add(d5.mul("10")).add(d6).add(d7.mul("0.1")).add(d8.mul("0.01"));
+                nownum.innerHTML = nowAnswer;
+              }
+              else
+              {
+                nowAnswer = d1.mul("100000").add(d2.mul("10000")).add(d3.mul("1000")).add(d4.mul("100")).add(d5.mul("10")).add(d6).add(d7.mul("0.1")).add(d8.mul("0.01"));
+                nownum.innerHTML = Informula + nowAnswer;
+              }
+            }
+            else if(thisnumdecimalpoint === "afterd7")
+            {
+              normalnumin = true;
+              if(Informula === ""){
+                nowAnswer = d1.mul("1000000").add(d2.mul("100000")).add(d3.mul("10000")).add(d4.mul("1000")).add(d5.mul("100")).add(d6.mul("10")).add(d7).add(d8.mul("0.1"));
+                nownum.innerHTML = nowAnswer;
+              }
+              else
+              {
+                nowAnswer = d1.mul("1000000").add(d2.mul("100000")).add(d3.mul("10000")).add(d4.mul("1000")).add(d5.mul("100")).add(d6.mul("10")).add(d7).add(d8.mul("0.1"));
+                nownum.innerHTML = Informula + nowAnswer;
+              }
+            }
+            else
+            {
+              normalnumin = true;
+              if(Informula === ""){
+                nowAnswer = d1.mul("10000000").add(d2.mul("1000000")).add(d3.mul("100000")).add(d4.mul("10000")).add(d5.mul("1000")).add(d6.mul("100")).add(d7.mul("10")).add(d8);
+                nownum.innerHTML = nowAnswer;
+              }
+              else
+              {
+                nowAnswer = d1.mul("10000000").add(d2.mul("1000000")).add(d3.mul("100000")).add(d4.mul("10000")).add(d5.mul("1000")).add(d6.mul("100")).add(d7.mul("10")).add(d8);
+                nownum.innerHTML = Informula + nowAnswer;
+              }
+            }
+            
+            if(thisnumberminus)
+            {
+              normalnumin = false;
+              nownum.innerHTML =Informula +  "-" + nowAnswer;
+            }
+            if(thisnumbersqrt)
+            {
+              normalnumin = false;
+              nownum.innerHTML =Informula +  "√" + nowAnswer;
+            }
+            if(normalnumin)
+            {
+              normalnumin = true;
+              if(Informula === ""){
+                nowAnswer = d1.mul("10000000").add(d2.mul("1000000")).add(d3.mul("100000")).add(d4.mul("10000")).add(d5.mul("1000")).add(d6.mul("100")).add(d7.mul("10")).add(d8);
+                nownum.innerHTML = nowAnswer;
+              }
+              else
+              {
+                nowAnswer = d1.mul("10000000").add(d2.mul("1000000")).add(d3.mul("100000")).add(d4.mul("10000")).add(d5.mul("1000")).add(d6.mul("100")).add(d7.mul("10")).add(d8);
+                nownum.innerHTML = Informula + nowAnswer;
+              }
+            }
+          }
+          }
+    document.body.addEventListener('keydown', event => 
+    {
+      computeMethod = undefined;
+      ifresult = false;
+      notnumalert.innerHTML = "";
+      Innotnum.innerHTML = "";
+      notnum = "";
+      clearall = false;
+      clearnow = false;
+        function pressed1()
+        {
+            if(d1 === undefined)
+            {
+              if(keepbeforeans != undefined)
+{
+            clear();
+            nowAnswer = undefined;
+            keepbeforeans = undefined;
+            computeResult = undefined;
+            nownum.innerHTML = 0;
+            beforenum.innerHTML = "";
+            Resultin.innerHTML = "";
+            innumArray.splice(0);
+            
+            computeMethodArray.length = 0;
+            karisiki = "";
+            nowAnswerString = "";
+            nowAnswertoNumber = "";
+            Informula = "";
+            notinbeforeEnter = false;
+}
+ d1 = new Decimal('1');
+              return d1;
+            }
+            if(d1 !== undefined && d2 === undefined && d8 === undefined)
+            {
+              d2 = new Decimal('1');
+              return d2;
+            }
+            if(d2 !== undefined && d3 === undefined && d8 === undefined)
+            {
+              d3 = new Decimal('1');
+              return d3;
+            }
+            if(d3 !== undefined && d4 === undefined && d8 === undefined)
+            {
+              d4 = new Decimal('1');
+              return d4;
+            }
+             if(d4 !== undefined && d5 === undefined && d8 === undefined)
+            {
+              d5 = new Decimal('1');
+              return d5;
+            }
+             if(d5 !== undefined && d6 === undefined && d8 === undefined)
+            {
+              d6 = new Decimal('1');
+              return d6;
+            }
+             if(d6 !== undefined && d7 === undefined && d8 === undefined)
+            {
+              d7 = new Decimal('1');
+              return d7;
+            }
+             if(d7 !== undefined && d8 === undefined)
+            {
+              d8 = new Decimal('1');
+              return d8;
+            }
+        }
+        function pressed2()
+        {
+            if(d1 === undefined)
+            {
+              if(keepbeforeans != undefined)
+{
+            clear();
+            nowAnswer = undefined;
+            keepbeforeans = undefined;
+            computeResult = undefined;
+            nownum.innerHTML = 0;
+            beforenum.innerHTML = "";
+            Resultin.innerHTML = "";
+            innumArray.splice(0);
+            computeMethodArray.length = 0;
+            karisiki = "";
+            nowAnswerString = "";
+            nowAnswertoNumber = "";
+            Informula = "";
+            notinbeforeEnter = false;
+}
+ d1 = new Decimal('2');
+              return d1;
+            }
+             if(d1 !== undefined && d2 === undefined && d8 === undefined)
+            {
+              d2 = new Decimal('2');;
+              return d2;
+            }
+             if(d2 !== undefined && d3 === undefined && d8 === undefined)
+            {
+              d3 = new Decimal('2');;
+              return d3;
+            }
+             if(d3 !== undefined && d4 === undefined && d8 === undefined)
+            {
+              d4 = new Decimal('2');;
+              return d4;
+            }
+             if(d4 !== undefined && d5 === undefined && d8 === undefined)
+            {
+              d5 = new Decimal('2');;
+              return d5;
+            }
+             if(d5 !== undefined && d6 === undefined && d8 === undefined)
+            {
+              d6 = new Decimal('2');;
+              return d6;
+            }
+             if(d6 !== undefined && d7 === undefined && d8 === undefined)
+            {
+              d7 = new Decimal('2');;
+              return d7;
+            }
+             if(d7 !== undefined && d8 === undefined)
+            {
+              d8 = new Decimal('2');;
+              return d8;
+            }
+        }
+        function pressed3()
+        {
+            if(d1 === undefined)
+            {
+              if(keepbeforeans != undefined)
+{
+            clear();
+            nowAnswer = undefined;
+            keepbeforeans = undefined;
+            computeResult = undefined;
+            nownum.innerHTML = 0;
+            beforenum.innerHTML = "";
+            Resultin.innerHTML = "";
+            innumArray.splice(0);
+            computeMethodArray.length = 0;
+            karisiki = "";
+            nowAnswerString = "";
+            nowAnswertoNumber = "";
+            Informula = "";
+            notinbeforeEnter = false;
+}
+ d1 = new Decimal('3');
+              return d1;
+            }
+             if(d1 !== undefined && d2 === undefined && d8 === undefined)
+            {
+              d2 = new Decimal('3');
+              return d2;
+            }
+             if(d2 !== undefined && d3 === undefined && d8 === undefined)
+            {
+              d3 = new Decimal('3');
+              return d3;
+            }
+             if(d3 !== undefined && d4 === undefined && d8 === undefined)
+            {
+              d4 = new Decimal('3');
+              return d4;
+            }
+             if(d4 !== undefined && d5 === undefined && d8 === undefined)
+            {
+              d5 = new Decimal('3');
+              return d5;
+            }
+             if(d5 !== undefined && d6 === undefined && d8 === undefined)
+            {
+              d6 = new Decimal('3');
+              return d6;
+            }
+             if(d6 !== undefined && d7 === undefined && d8 === undefined)
+            {
+              d7 = new Decimal('3');
+              return d7;
+            }
+             if(d7 !== undefined && d8 === undefined)
+            {
+              d8 = new Decimal('3');
+              return d8;
+            }
+        }
+        function pressed4()
+        {
+            if(d1 === undefined)
+            {
+              if(keepbeforeans != undefined)
+{
+            clear();
+            nowAnswer = undefined;
+            keepbeforeans = undefined;
+            computeResult = undefined;
+            nownum.innerHTML = 0;
+            beforenum.innerHTML = "";
+            Resultin.innerHTML = "";
+            innumArray.splice(0);
+            computeMethodArray.length = 0;
+            karisiki = "";
+            nowAnswerString = "";
+            nowAnswertoNumber = "";
+            Informula = "";
+            notinbeforeEnter = false;
+}
+ d1 = new Decimal('4');
+              return d1;
+            }
+             if(d1 !== undefined && d2 === undefined && d8 === undefined)
+            {
+              d2 = new Decimal('4');
+              return d2;
+            }
+             if(d2 !== undefined && d3 === undefined && d8 === undefined)
+            {
+              d3 = new Decimal('4');
+              return d3;
+            }
+             if(d3 !== undefined && d4 === undefined && d8 === undefined)
+            {
+              d4 = new Decimal('4');
+              return d4;
+            }
+             if(d4 !== undefined && d5 === undefined && d8 === undefined)
+            {
+              d5 = new Decimal('4');
+              return d5;
+            }
+             if(d5 !== undefined && d6 === undefined && d8 === undefined)
+            {
+              d6 = new Decimal('4');
+              return d6;
+            }
+             if(d6 !== undefined && d7 === undefined && d8 === undefined)
+            {
+              d7 = new Decimal('4');
+              return d7;
+            }
+             if(d7 !== undefined && d8 === undefined)
+            {
+              d8 = new Decimal('4');
+              return d8;
+            }
+        }
+        function pressed5()
+        {
+            if(d1 === undefined)
+            {
+              if(keepbeforeans != undefined)
+{
+            clear();
+            nowAnswer = undefined;
+            keepbeforeans = undefined;
+            computeResult = undefined;
+            nownum.innerHTML = 0;
+            beforenum.innerHTML = "";
+            Resultin.innerHTML = "";
+            innumArray.splice(0);
+            computeMethodArray.length = 0;
+            karisiki = "";
+            nowAnswerString = "";
+            nowAnswertoNumber = "";
+            Informula = "";
+            notinbeforeEnter = false;
+}
+ d1 = new Decimal('5');
+              return d1;
+            }
+             if(d1 !== undefined && d2 === undefined && d8 === undefined)
+            {
+              d2 = new Decimal('5');
+              return d2;
+            }
+             if(d2 !== undefined && d3 === undefined && d8 === undefined)
+            {
+              d3 = new Decimal('5');
+              return d3;
+            }
+             if(d3 !== undefined && d4 === undefined && d8 === undefined)
+            {
+              d4 = new Decimal('5');
+              return d4;
+            }
+             if(d4 !== undefined && d5 === undefined && d8 === undefined)
+            {
+              d5 = new Decimal('5');
+              return d5;
+            }
+             if(d5 !== undefined && d6 === undefined && d8 === undefined)
+            {
+              d6 = new Decimal('5');
+              return d6;
+            }
+             if(d6 !== undefined && d7 === undefined && d8 === undefined)
+            {
+              d7 = new Decimal('5');
+              return d7;
+            }
+             if(d7 !== undefined && d8 === undefined)
+            {
+              d8 = new Decimal('5');
+              return d8;
+            }
+        }
+        function pressed6()
+        {
+            if(d1 === undefined)
+            {
+              if(keepbeforeans != undefined)
+{
+            clear();
+            nowAnswer = undefined;
+            keepbeforeans = undefined;
+            computeResult = undefined;
+            nownum.innerHTML = 0;
+            beforenum.innerHTML = "";
+            Resultin.innerHTML = "";
+            innumArray.splice(0);
+            computeMethodArray.length = 0;
+            karisiki = "";
+            nowAnswerString = "";
+            nowAnswertoNumber = "";
+            Informula = "";
+            notinbeforeEnter = false;
+}
+ d1 = new Decimal('6');
+              return d1;
+            }
+             if(d1 !== undefined && d2 === undefined && d8 === undefined)
+            {
+              d2 = new Decimal('6');
+              return d2;
+            }
+             if(d2 !== undefined && d3 === undefined && d8 === undefined)
+            {
+              d3 = new Decimal('6');
+              return d3;
+            }
+             if(d3 !== undefined && d4 === undefined && d8 === undefined)
+            {
+              d4 = new Decimal('6');
+              return d4;
+            }
+             if(d4 !== undefined && d5 === undefined && d8 === undefined)
+            {
+              d5 = new Decimal('6');
+              return d5;
+            }
+             if(d5 !== undefined && d6 === undefined && d8 === undefined)
+            {
+              d6 = new Decimal('6');
+              return d6;
+            }
+             if(d6 !== undefined && d7 === undefined && d8 === undefined)
+            {
+              d7 = new Decimal('6');
+              return d7;
+            }
+             if(d7 !== undefined && d8 === undefined)
+            {
+              d8 = new Decimal('6');
+              return d8;
+            }
+        }
+        function pressed7()
+        {
+            if(d1 === undefined)
+            {
+              if(keepbeforeans != undefined)
+{
+            clear();
+            nowAnswer = undefined;
+            keepbeforeans = undefined;
+            computeResult = undefined;
+            nownum.innerHTML = 0;
+            beforenum.innerHTML = "";
+            Resultin.innerHTML = "";
+            innumArray.splice(0);
+            computeMethodArray.length = 0;
+            karisiki = "";
+            nowAnswerString = "";
+            nowAnswertoNumber = "";
+            Informula = "";
+            notinbeforeEnter = false;
+}
+ d1 = new Decimal('7');
+              return d1;
+            }
+             if(d1 !== undefined && d2 === undefined && d8 === undefined)
+            {
+              d2 = new Decimal('7');
+              return d2;
+            }
+             if(d2 !== undefined && d3 === undefined && d8 === undefined)
+            {
+              d3 = new Decimal('7');
+              return d3;
+            }
+             if(d3 !== undefined && d4 === undefined && d8 === undefined)
+            {
+              d4 = new Decimal('7');
+              return d4;
+            }
+             if(d4 !== undefined && d5 === undefined && d8 === undefined)
+            {
+              d5 = new Decimal('7');
+              return d5;
+            }
+             if(d5 !== undefined && d6 === undefined && d8 === undefined)
+            {
+              d6 = new Decimal('7');
+              return d6;
+            }
+             if(d6 !== undefined && d7 === undefined && d8 === undefined)
+            {
+              d7 = new Decimal('7');
+              return d7;
+            }
+             if(d7 !== undefined && d8 === undefined)
+            {
+              d8 = new Decimal('7');
+              return d8;
+            }
+        }
+        function pressed8()
+        {
+            if(d1 === undefined)
+            {
+              if(keepbeforeans != undefined)
+{
+            clear();
+            nowAnswer = undefined;
+            keepbeforeans = undefined;
+            computeResult = undefined;
+            nownum.innerHTML = 0;
+            beforenum.innerHTML = "";
+            Resultin.innerHTML = "";
+            innumArray.splice(0);
+            computeMethodArray.length = 0;
+            karisiki = "";
+            nowAnswerString = "";
+            nowAnswertoNumber = "";
+            Informula = "";
+            notinbeforeEnter = false;
+}
+ d1 = new Decimal('8');
+              return d1;
+            }
+             if(d1 !== undefined && d2 === undefined && d8 === undefined)
+            {
+              d2 = new Decimal('8');
+              return d2;
+            }
+             if(d2 !== undefined && d3 === undefined && d8 === undefined)
+            {
+              d3 = new Decimal('8');
+              return d3;
+            }
+             if(d3 !== undefined && d4 === undefined && d8 === undefined)
+            {
+              d4 = new Decimal('8');
+              return d4;
+            }
+             if(d4 !== undefined && d5 === undefined && d8 === undefined)
+            {
+              d5 = new Decimal('8');
+              return d5;
+            }
+             if(d5 !== undefined && d6 === undefined && d8 === undefined)
+            {
+              d6 = new Decimal('8');
+              return d6;
+            }
+             if(d6 !== undefined && d7 === undefined && d8 === undefined)
+            {
+              d7 = new Decimal('8');
+              return d7;
+            }
+             if(d7 !== undefined && d8 === undefined)
+            {
+              d8 = new Decimal('8');
+              return d8;
+            }
+        }
+        function pressed9()
+        {
+            if(d1 === undefined)
+            {
+              if(keepbeforeans != undefined)
+{
+            clear();
+            nowAnswer = undefined;
+            keepbeforeans = undefined;
+            computeResult = undefined;
+            nownum.innerHTML = 0;
+            beforenum.innerHTML = "";
+            Resultin.innerHTML = "";
+            innumArray.splice(0);
+            computeMethodArray.length = 0;
+            karisiki = "";
+            nowAnswerString = "";
+            nowAnswertoNumber = "";
+            Informula = "";
+            notinbeforeEnter = false;
+}
+ d1 = new Decimal('9');
+              return d1;
+            }
+             if(d1 !== undefined && d2 === undefined && d8 === undefined)
+            {
+              d2 = new Decimal('9');
+              return d2;
+            }
+             if(d2 !== undefined && d3 === undefined && d8 === undefined)
+            {
+              d3 = new Decimal('9');
+              return d3;
+            }
+             if(d3 !== undefined && d4 === undefined && d8 === undefined)
+            {
+              d4 = new Decimal('9');
+              return d4;
+            }
+             if(d4 !== undefined && d5 === undefined && d8 === undefined)
+            {
+              d5 = new Decimal('9');
+              return d5;
+            }
+             if(d5 !== undefined && d6 === undefined && d8 === undefined)
+            {
+              d6 = new Decimal('9');
+              return d6;
+            }
+             if(d6 !== undefined && d7 === undefined && d8 === undefined)
+            {
+              d7 = new Decimal('9');
+              return d7;
+            }
+             if(d7 !== undefined && d8 === undefined)
+            {
+              d8 = new Decimal('9');
+              return d8;
+            }
+        }
+        function pressed0()
+        {
+            if(d1 === undefined)
+            {
+              if(keepbeforeans != undefined)
+{
+            clear();
+            nowAnswer = undefined;
+            keepbeforeans = undefined;
+            computeResult = undefined;
+            nownum.innerHTML = 0;
+            beforenum.innerHTML = "";
+            Resultin.innerHTML = "";
+            innumArray.splice(0);
+            computeMethodArray.length = 0;
+            karisiki = "";
+            nowAnswerString = "";
+            nowAnswertoNumber = "";
+            Informula = "";
+            notinbeforeEnter = false;
+}
+ d1 = new Decimal('0');
+              return d1;
+            }
+             if(d1 !== undefined && d2 === undefined && d8 === undefined)
+            {
+              d2 = new Decimal('0');
+              return d2;
+            }
+             if(d2 !== undefined && d3 === undefined && d8 === undefined)
+            {
+              d3 = new Decimal('0');
+              return d3;
+            }
+             if(d3 !== undefined && d4 === undefined && d8 === undefined)
+            {
+              d4 = new Decimal('0');
+              return d4;
+            }
+             if(d4 !== undefined && d5 === undefined && d8 === undefined)
+            {
+              d5 = new Decimal('0');
+              return d5;
+            }
+             if(d5 !== undefined && d6 === undefined && d8 === undefined)
+            {
+              d6 = new Decimal('0');
+              return d6;
+            }
+             if(d6 !== undefined && d7 === undefined && d8 === undefined)
+            {
+              d7 = new Decimal('0');
+              return d7;
+            }
+             if(d7 !== undefined && d8 === undefined)
+            {
+              d8 = new Decimal('0');
+              return d8;
+            }
+        }
+        function clear()
+        {
+          d1 = undefined;
+          d2 = undefined;
+          d3 = undefined;
+          d4 = undefined;
+          d5 = undefined;
+          d6 = undefined;
+          d7 = undefined;
+          d8 = undefined;
+          thisnumberminus = false;
+          thisnumbersqrt = false;
+          thisnumdecimalpoint = "";
+        }
+
+        function Ftotal()
+      {
+        if(event.key === '1')
+        {
+          pressed1();
+        }
+        if(event.key === '2')
+        {
+          pressed2();
+        }
+        if(event.key === '3')
+        {
+          pressed3();
+        }
+        if(event.key === '4')
+        {
+          pressed4();
+        }
+        if(event.key === '5')
+        {
+          pressed5();
+        }
+        if(event.key === '6')
+        {
+          pressed6();
+        }
+        if(event.key === '7')
+        {
+          pressed7();
+        }
+        if(event.key === '8')
+        {
+          pressed8();
+        }
+        if(event.key === '9')
+        {
+          pressed9();
+        }
+        if(event.key === '0')
+        {
+          pressed0();
+        }
+        /////////クリアー系/////////
+        if(event.key === 'c')
+        {
+          clearnow = true;
+        }
+        if(event.key === 'a')
+        {
+          clearall = true;
+        }
+        /////////計算方法/////////
+        if(event.key === '+' || event.key === ';')
+        {
+          computeMethod = "plus";
+        }
+        if(event.key === '-')
+        {
+          computeMethod = "minus";
+        }
+        if(event.key === ':' || event.key === '*')
+        {
+          computeMethod = "multiplication";
+        }
+        if(event.key === '/')
+        {
+          computeMethod = "divide"
+        }
+        if(event.key === 'm')
+        {
+          thisnumberminus = true;
+        }
+        if(event.key === 's')
+        {
+          thisnumbersqrt = true;
+        }
+        if(event.key === 'i')
+        {
+          console.log("i押された直後");
+          IndexMode = true;
+             Resultin.innerHTML = nowAnswer + "の指数を入力(指数を入力する前に必ずcキーを入力してください。正しい結果が出力されません)";
+              console.log("一応i押されてる");
+          nowAnswertoNumber = nowAnswer.toNumber();
+          nowAnswer = undefined;
+          Informula = "";
+
+        }
+        if(event.key === '.')
+        {
+          if(d1 === undefined)
+          {
+            if(thisnumberminus)
+            {
+              nownum.innerHTML = "-" + "0.";
+              nownum.innerHTML = "0.";
+            }
+            thisnumdecimalpoint = "";
+            thisnumdecimalpoint = "notinNum";
+            nownum.innerHTML = "0.";
+          }
+          else if(d1 !== undefined && d2 === undefined)
+          {
+            thisnumdecimalpoint = "";
+            thisnumdecimalpoint = "afterd1";
+          }
+          else if(d2 !== undefined && d3 === undefined)
+          {
+            thisnumdecimalpoint = "";
+            thisnumdecimalpoint = "afterd2";
+          }
+          else if(d3 !== undefined && d4 === undefined)
+          {
+            thisnumdecimalpoint = "";
+            thisnumdecimalpoint = "afterd3";
+          }
+          else if(d4 !== undefined && d5 === undefined)
+          {
+            thisnumdecimalpoint = "";
+            thisnumdecimalpoint = "afterd4";
+          }
+          else if(d5 !== undefined && d6 === undefined)
+          {
+            thisnumdecimalpoint = "";
+            thisnumdecimalpoint = "afterd5";
+          }
+          else if(d6 !== undefined && d7 === undefined)
+          {
+            thisnumdecimalpoint = "";
+            thisnumdecimalpoint = "afterd6";
+          }
+          else if(d7 !== undefined && d8 === undefined)
+          {
+            thisnumdecimalpoint = "";
+            thisnumdecimalpoint = "afterd7";
+          }
+          else if(d8 !== undefined)
+          {
+            thisnumdecimalpoint = "";
+          }
+        }
+        /////////結果保存/////////
+
+        if(event.key === 'k')
+        {
+          if(computeMethod === 'plus')
+          {
+            if(thisnumbersqrt)
+              {
+                nowAnswer = Math.sqrt(nowAnswer);
+
+              }
+              if(thisnumberminus)
+              {
+                nowAnswer *= -1;
+              }
+            keepresult = keepbeforeans + nowAnswer;
+            Resultin.innerHTML = keepresult;
+          }
+          if(computeMethod === 'minus')
+          {
+            if(thisnumbersqrt)
+              {
+                nowAnswer = Math.sqrt(nowAnswer);
+
+              }
+              if(thisnumberminus)
+              {
+                nowAnswer *= -1;
+              }
+            keepresult = keepbeforeans - nowAnswer;
+            Resultin.innerHTML = keepresult;
+          }
+          if(computeMethod === 'multiplication')
+          {
+            if(thisnumbersqrt)
+              {
+                nowAnswer = Math.sqrt(nowAnswer);
+
+              }
+              if(thisnumberminus)
+              {
+                nowAnswer *= -1;
+              }
+            keepresult = keepbeforeans * nowAnswer;
+            Resultin.innerHTML = keepresult;
+          }
+          if(computeMethod === 'divide')
+          {
+            if(thisnumbersqrt)
+              {
+                nowAnswer = Math.sqrt(nowAnswer);
+
+              }
+              if(thisnumberminus)
+              {
+                nowAnswer *= -1;
+              }
+              keepresult = keepbeforeans / nowAnswer;
+              Resultin.innerHTML = keepresult;
+          }
+          else
+          {
+            keepresult = keepbeforeans;
+          }
+            
+        }
+        /////////非対応時/////////
+        if(event.key !== '0' && event.key !== '1' && event.key !== '2' && event.key !== '3' && event.key !== '4' && event.key !== '5' && event.key !== '6' && event.key !== '7' && event.key !== '8' && event.key !== '9' && event.key !== 'c' && event.key !== 'a' && event.key !== '+' && event.key !== '-' && event.key !== ';' && event.key !== '*' && event.key !== ':' && event.key !== '/' && event.key !== 'Enter' && event.key !== 'm' && event.key !== '.')
+        {
+          notnum = event.key;
+          Innotnum.innerHTML = notnum;
+          notnumalert.innerHTML = "対応するキーを入力してください";
+        }
+      }
+      Ftotal();
+          /////////表示処理/////////
+
+          render();
+          if(clearnow)
+          {
+            clear();
+            nowAnswer = 0;
+            nownum.innerHTML = nowAnswer;
+            innumArray[innumArray.length-1] = undefined;
+          }
+          if(clearall)
+          {
+            clear();
+            nowAnswer = undefined;
+            keepbeforeans = undefined;
+            computeResult = undefined;
+            nownum.innerHTML = 0;
+            beforenum.innerHTML = "";
+            Resultin.innerHTML = "";
+            innumArray.splice(0);
+            console.log(innumArray);
+            computeMethodArray.length = 0;
+            karisiki = "";
+            nowAnswerString = "";
+            nowAnswertoNumber = "";
+            Informula = "";
+          }
+        
+        
+          /////////計算/////////
+          //足し算処理
+          if(computeMethod === "plus")
+          {
+            if(nowAnswer === undefined && keepbeforeans === undefined)
+            {
+              beforenum.innerHTML = "";  
+            }
+            if(nowAnswer === undefined)
+            {
+              computeMethod = "";
+            }
+            if(computeMethod === "plus")
+            {
+            if(innumArray.length === 0)
+            {
+              nowAnswertoNumber = nowAnswer.toNumber();
+              
+              if(thisnumbersqrt)
+              {
+                nowAnswer = Math.sqrt(nowAnswertoNumber);
+                nowAnswertoNumber = Math.sqrt(nowAnswertoNumber);
+                thisnumbersqrt = false;
+              }
+              keepcompMethod = "plus";
+              if(thisnumberminus)
+              {
+                nowAnswertoNumber *= -1;
+              }
+              nowAnswerString = String(nowAnswertoNumber);
+              karisiki = nowAnswerString + "+";
+              innumArray.push(nowAnswer);
+              computeMethodArray.push("+");
+              keepcompMethod = "plus";
+              nowAnswer = undefined;
+              Informula = innumArray[0] + "+";
+              nownum.innerHTML = Informula;
+              thisnumberminus = false;
+              thisnumdecimalpoint = "";
+              clear();
+              //console.log(karisiki);
+            }
+              else
+              {
+                nowAnswertoNumber = nowAnswer.toNumber();
+              
+              if(thisnumbersqrt)
+              {
+                nowAnswer = Math.sqrt(nowAnswertoNumber);
+                nowAnswertoNumber = Math.sqrt(nowAnswertoNumber);
+                thisnumbersqrt = false;
+              }
+              keepcompMethod = "plus";
+              if(thisnumberminus)
+              {
+                nowAnswertoNumber *= -1;
+              }
+              nowAnswerString = String(nowAnswertoNumber);
+              karisiki = nowAnswerString + "+";
+              innumArray.push(nowAnswer);
+              computeMethodArray.push("+");
+              keepcompMethod = "plus";
+              nowAnswer = undefined;
+              Informula = innumArray[0] + "+";
+              nownum.innerHTML = Informula;
+              thisnumberminus = false;
+              thisnumdecimalpoint = "";
+              clear();
+              }         
+
+            }
+          }
+
+          //引き算処理
+          if(computeMethod === "minus")
+          {
+            if(nowAnswer === undefined && keepbeforeans === undefined)
+            {
+              beforenum.innerHTML = "";  
+            }
+            if(nowAnswer === undefined)
+            {
+              computeMethod = "";
+            }
+            if(computeMethod === "minus")
+            {
+            if(innumArray.length === 0)
+            {
+
+              if(thisnumbersqrt)
+              {
+                nowAnswer = Math.sqrt(innumArray[0]);
+                thisnumbersqrt = false;
+              }
+              keepcompMethod = "minus";
+              if(thisnumberminus)
+              {
+                nowAnswer *= -1;
+              }
+              nowAnswertoNumber = nowAnswer.toNumber();
+              nowAnswerString = String(nowAnswertoNumber);
+              karisiki = nowAnswerString + "-";
+              innumArray.push(nowAnswer);
+              computeMethodArray.push("-");
+              keepcompMethod = "minus";
+              nowAnswer = undefined;
+              Informula = innumArray[0] + "-";
+              nownum.innerHTML = Informula;
+              thisnumberminus = false;
+              thisnumdecimalpoint = "";
+              clear();
+              //console.log(karisiki);
+            }
+              else
+              {
+                innumArray.push(nowAnswer);
+                computeMethodArray.push("-");
+                if(thisnumbersqrt)
+              {
+                nowAnswer = Math.sqrt(nowAnswertoNumber);
+                thisnumbersqrt = false;
+              }
+              if(thisnumberminus)
+              {
+                nowAnswertoNumber *= -1;
+              }
+              keepcompMethod = "minus";
+              //computeResult = keepbeforeans + nowAnswer;
+              Informula += innumArray[innumArray.length - 1] + "-";
+              nownum.innerHTML = Informula;
+              nowAnswertoNumber = nowAnswer.toNumber();
+              nowAnswerString = String(nowAnswertoNumber);
+              //console.log(nowAnswerString);
+              karisiki += nowAnswerString + "-";
+              //console.log(karisiki);
+              nowAnswer = undefined;
+              thisnumberminus = false;
+              thisnumdecimalpoint = "";
+
+              clear();
+              }         
+
+            }
+          }
+          //掛け算処理
+          if(computeMethod === "multiplication")
+          {
+            if(nowAnswer === undefined && keepbeforeans === undefined)
+            {
+              beforenum.innerHTML = "";  
+            }
+            if(nowAnswer === undefined)
+            {
+              computeMethod = "";
+            }
+            if(computeMethod === "multiplication")
+            {
+            if(innumArray.length === 0)
+            {
+
+              if(thisnumbersqrt)
+              {
+                nowAnswer = Math.sqrt(innumArray[0]);
+                thisnumbersqrt = false;
+              }
+              keepcompMethod = "multiplication";
+              if(thisnumberminus)
+              {
+                nowAnswer *= -1;
+              }
+              nowAnswertoNumber = nowAnswer.toNumber();
+              nowAnswerString = String(nowAnswertoNumber);
+              karisiki = nowAnswerString + "*";
+              innumArray.push(nowAnswer);
+              computeMethodArray.push("*");
+              keepcompMethod = "multiplication";
+              nowAnswer = undefined;
+              Informula = innumArray[0] + "✖";
+              nownum.innerHTML = Informula;
+              thisnumberminus = false;
+              thisnumdecimalpoint = "";
+              clear();
+              //console.log(karisiki);
+            }
+              else
+              {
+                innumArray.push(nowAnswer);
+                computeMethodArray.push("*");
+                if(thisnumbersqrt)
+              {
+                nowAnswer = Math.sqrt(nowAnswertoNumber);
+                thisnumbersqrt = false;
+              }
+              if(thisnumberminus)
+              {
+                nowAnswertoNumber *= -1;
+              }
+              keepcompMethod = "multiplication";
+              //computeResult = keepbeforeans + nowAnswer;
+              Informula += innumArray[innumArray.length - 1] + "✖";
+              nownum.innerHTML = Informula;
+              nowAnswertoNumber = nowAnswer.toNumber();
+              nowAnswerString = String(nowAnswertoNumber);
+              //console.log(nowAnswerString);
+              karisiki += nowAnswerString + "*";
+              //console.log(karisiki);
+              nowAnswer = undefined;
+              thisnumberminus = false;
+              thisnumdecimalpoint = "";
+
+              clear();
+              }         
+
+            }
+          }
+          //割り算処理
+          if(computeMethod === "divide")
+          {
+            if(nowAnswer === undefined && keepbeforeans === undefined)
+            {
+              beforenum.innerHTML = "";  
+            }
+            if(nowAnswer === undefined)
+            {
+              computeMethod = "";
+            }
+            if(computeMethod === "divide")
+            {
+            if(innumArray.length === 0)
+            {
+
+              if(thisnumbersqrt)
+              {
+                nowAnswer = Math.sqrt(innumArray[0]);
+                thisnumbersqrt = false;
+              }
+              keepcompMethod = "divide";
+              if(thisnumberminus)
+              {
+                nowAnswer *= -1;
+              }
+              nowAnswertoNumber = nowAnswer.toNumber();
+              nowAnswerString = String(nowAnswertoNumber);
+              karisiki = nowAnswerString + "/";
+              innumArray.push(nowAnswer);
+              computeMethodArray.push("/");
+              keepcompMethod = "divide";
+              nowAnswer = undefined;
+              Informula = innumArray[0] + "÷";
+              nownum.innerHTML = Informula;
+              thisnumberminus = false;
+              thisnumdecimalpoint = "";
+              clear();
+              //console.log(karisiki);
+            }
+              else
+              {
+                innumArray.push(nowAnswer);
+                computeMethodArray.push("/");
+                if(thisnumbersqrt)
+              {
+                nowAnswer = Math.sqrt(nowAnswertoNumber);
+                thisnumbersqrt = false;
+              }
+              if(thisnumberminus)
+              {
+                nowAnswertoNumber *= -1;
+              }
+              keepcompMethod = "divide";
+              //computeResult = keepbeforeans + nowAnswer;
+              Informula += innumArray[innumArray.length - 1] + "÷";
+              nownum.innerHTML = Informula;
+              nowAnswertoNumber = nowAnswer.toNumber();
+              nowAnswerString = String(nowAnswertoNumber);
+              //console.log(nowAnswerString);
+              karisiki += nowAnswerString + "/";
+              //console.log(karisiki);
+              nowAnswer = undefined;
+              thisnumberminus = false;
+              thisnumdecimalpoint = "";
+
+              clear();
+              }         
+
+            }
+          }
+        /////////確定処理/////////
+        if(event.key === 'Enter')
+        {
+          if(IndexMode)
+          {
+            if(nowAnswer === undefined)
+            {
+              nowAnswer = "0";
+            }
+            IndexNumber = nowAnswer.toNumber();
+            Resultin.innerHTML = nowAnswer;
+            nowAnswer = 1;
+            for(let i = 0; i < IndexNumber;i++)
+            {
+              nowAnswer *= nowAnswertoNumber;
+            }
+            karisiki = String(nowAnswer);
+            nownum.innerHTML = "="+karisiki;
+          }
+          else
+          {
+                      console.log(karisiki);
+          //keepbeforeans = eval(karisiki);
+          // 例: eval の代替手段
+//const result = new Function('return karisiki')();
+//console.log(result);
+          //keepbeforeans = result;
+
+          nowAnswertoNumber = nowAnswer.toNumber();
+          if(thisnumbersqrt)
+          {
+            nowAnswer = Math.sqrt(nowAnswertoNumber);
+            nowAnswertoNumber = Math.sqrt(nowAnswertoNumber);
+            thisnumbersqrt = false;
+          }
+          nowAnswerString = String(nowAnswertoNumber);
+          karisiki += nowAnswerString;
+          //Informula = karisiki;
+          karisiki = eval(karisiki);
+          console.log(karisiki);
+          nownum.innerHTML = "=" + karisiki;
+          Informula += nowAnswerString;
+           }
+          keepbeforeans = Informula;
+          beforenum.innerHTML = keepbeforeans;
+          let formula = [];
+          formula.push(Informula);
+          console.log(formula);
+          notinbeforeEnter = true;
+          nowAnswer = undefined;
+          clear();
+        }
+
+          
+          //let fastformulanum;
+          //for(let i = 0; i < innumArray.length;i++)
+          //{
+          //  if(i === 0)
+          //  {
+          //    fastformulanum = innumArray[i];
+          //  }
+          //  else
+          //  {
+          //    if(computeMethodArray[i-1] === "+")
+          //    {
+          //      console.log(innumArray[i]);
+          //      keepformula += "+" + innumArray[i];
+          //    }
+          //    if(computeMethodArray[i-1] === "-")
+          //    {
+          //      keepformula += "-" + innumArray[i];
+          //    }
+          //    if(computeMethodArray[i-1] === "*")
+          //    {
+          //      keepformula += "*" + innumArray[i];
+          //    }
+          //    if(computeMethodArray[i-1] === "/")
+          //    {
+          //      keepformula += "/" + innumArray[i];
+          //    }
+          //  }
+          //}
+          //keepbeforeans = fastformulanum + keepformula;
+
+          
+    })
+
+    btn1.addEventListener('click', (event) =>
+        {
+          function clicked1()
+          {
+            if(d1 === undefined)
+            {
+              if(keepbeforeans != undefined)
+{
+            clear();
+            nowAnswer = undefined;
+            keepbeforeans = undefined;
+            computeResult = undefined;
+            nownum.innerHTML = 0;
+            beforenum.innerHTML = "";
+            Resultin.innerHTML = "";
+            innumArray.splice(0);
+            computeMethodArray.length = 0;
+            karisiki = "";
+            nowAnswerString = "";
+            nowAnswertoNumber = "";
+            Informula = "";
+            notinbeforeEnter = false;
+}
+ d1 = new Decimal('1');
+              return d1;
+            }
+            if(d1 !== undefined && d2 === undefined && d8 === undefined)
+            {
+              d2 = new Decimal('1');
+              return d2;
+            }
+            if(d2 !== undefined && d3 === undefined && d8 === undefined)
+            {
+              d3 = new Decimal('1');
+              return d3;
+            }
+            if(d3 !== undefined && d4 === undefined && d8 === undefined)
+            {
+              d4 = new Decimal('1');
+              return d4;
+            }
+             if(d4 !== undefined && d5 === undefined && d8 === undefined)
+            {
+              d5 = new Decimal('1');
+              return d5;
+            }
+             if(d5 !== undefined && d6 === undefined && d8 === undefined)
+            {
+              d6 = new Decimal('1');
+              return d6;
+            }
+             if(d6 !== undefined && d7 === undefined && d8 === undefined)
+            {
+              d7 = new Decimal('1');
+              return d7;
+            }
+             if(d7 !== undefined && d8 === undefined)
+            {
+              d8 = new Decimal('1');
+              return d8;
+            }
+          }
+          clicked1();
+          /////////表示処理/////////
+          render();
+        })
+    btn2.addEventListener('click', (event) =>
+        {
+          function clicked2()
+          {
+            if(d1 === undefined)
+            {
+              if(keepbeforeans != undefined)
+{
+            clear();
+            nowAnswer = undefined;
+            keepbeforeans = undefined;
+            computeResult = undefined;
+            nownum.innerHTML = 0;
+            beforenum.innerHTML = "";
+            Resultin.innerHTML = "";
+            innumArray.splice(0);
+            computeMethodArray.length = 0;
+            karisiki = "";
+            nowAnswerString = "";
+            nowAnswertoNumber = "";
+            Informula = "";
+            notinbeforeEnter = false;
+}
+ d1 = new Decimal('2');
+              return d1;
+            }
+             if(d1 !== undefined && d2 === undefined && d8 === undefined)
+            {
+              d2 = new Decimal('2');;
+              return d2;
+            }
+             if(d2 !== undefined && d3 === undefined && d8 === undefined)
+            {
+              d3 = new Decimal('2');;
+              return d3;
+            }
+             if(d3 !== undefined && d4 === undefined && d8 === undefined)
+            {
+              d4 = new Decimal('2');;
+              return d4;
+            }
+             if(d4 !== undefined && d5 === undefined && d8 === undefined)
+            {
+              d5 = new Decimal('2');;
+              return d5;
+            }
+             if(d5 !== undefined && d6 === undefined && d8 === undefined)
+            {
+              d6 = new Decimal('2');;
+              return d6;
+            }
+             if(d6 !== undefined && d7 === undefined && d8 === undefined)
+            {
+              d7 = new Decimal('2');;
+              return d7;
+            }
+             if(d7 !== undefined && d8 === undefined)
+            {
+              d8 = new Decimal('2');;
+              return d8;
+            }
+        }
+        clicked2();
+          /////////表示処理/////////
+          render();
+        })
+    btn3.addEventListener('click', (event) =>
+      {
+        function clicked3()
+        {
+          if(d1 === undefined)
+            {
+if(keepbeforeans != undefined)
+{
+            clear();
+            nowAnswer = undefined;
+            keepbeforeans = undefined;
+            computeResult = undefined;
+            nownum.innerHTML = 0;
+            beforenum.innerHTML = "";
+            Resultin.innerHTML = "";
+            innumArray.splice(0);
+            computeMethodArray.length = 0;
+            karisiki = "";
+            nowAnswerString = "";
+            nowAnswertoNumber = "";
+            Informula = "";
+            notinbeforeEnter = false;
+}
+ d1 = new Decimal('3');
+              return d1;
+            }
+             if(d1 !== undefined && d2 === undefined && d8 === undefined)
+            {
+              d2 = new Decimal('3');
+              return d2;
+            }
+             if(d2 !== undefined && d3 === undefined && d8 === undefined)
+            {
+              d3 = new Decimal('3');
+              return d3;
+            }
+             if(d3 !== undefined && d4 === undefined && d8 === undefined)
+            {
+              d4 = new Decimal('3');
+              return d4;
+            }
+             if(d4 !== undefined && d5 === undefined && d8 === undefined)
+            {
+              d5 = new Decimal('3');
+              return d5;
+            }
+             if(d5 !== undefined && d6 === undefined && d8 === undefined)
+            {
+              d6 = new Decimal('3');
+              return d6;
+            }
+             if(d6 !== undefined && d7 === undefined && d8 === undefined)
+            {
+              d7 = new Decimal('3');
+              return d7;
+            }
+             if(d7 !== undefined && d8 === undefined)
+            {
+              d8 = new Decimal('3');
+              return d8;
+            }
+        }
+        clicked3();
+          /////////表示処理/////////
+render();
+      })
+    btn4.addEventListener('click', (event) =>
+        {
+          function clicked4()
+        {
+          if(d1 === undefined)
+            {
+if(keepbeforeans != undefined)
+{
+            clear();
+            nowAnswer = undefined;
+            keepbeforeans = undefined;
+            computeResult = undefined;
+            nownum.innerHTML = 0;
+            beforenum.innerHTML = "";
+            Resultin.innerHTML = "";
+            innumArray.splice(0);
+            computeMethodArray.length = 0;
+            karisiki = "";
+            nowAnswerString = "";
+            nowAnswertoNumber = "";
+            Informula = "";
+            notinbeforeEnter = false;
+}
+ d1 = new Decimal('4');
+              return d1;
+            }
+             if(d1 !== undefined && d2 === undefined && d8 === undefined)
+            {
+              d2 = new Decimal('4');
+              return d2;
+            }
+             if(d2 !== undefined && d3 === undefined && d8 === undefined)
+            {
+              d3 = new Decimal('4');
+              return d3;
+            }
+             if(d3 !== undefined && d4 === undefined && d8 === undefined)
+            {
+              d4 = new Decimal('4');
+              return d4;
+            }
+             if(d4 !== undefined && d5 === undefined && d8 === undefined)
+            {
+              d5 = new Decimal('4');
+              return d5;
+            }
+             if(d5 !== undefined && d6 === undefined && d8 === undefined)
+            {
+              d6 = new Decimal('4');
+              return d6;
+            }
+             if(d6 !== undefined && d7 === undefined && d8 === undefined)
+            {
+              d7 = new Decimal('4');
+              return d7;
+            }
+             if(d7 !== undefined && d8 === undefined)
+            {
+              d8 = new Decimal('4');
+              return d8;
+            }
+        }
+        clicked4();
+          /////////表示処理/////////
+render();
+        })
+    btn5.addEventListener('click', (event) =>
+        {
+          function clicked5()
+        {
+          if(d1 === undefined)
+            {
+if(keepbeforeans != undefined)
+{
+            clear();
+            nowAnswer = undefined;
+            keepbeforeans = undefined;
+            computeResult = undefined;
+            nownum.innerHTML = 0;
+            beforenum.innerHTML = "";
+            Resultin.innerHTML = "";
+            innumArray.splice(0);
+            computeMethodArray.length = 0;
+            karisiki = "";
+            nowAnswerString = "";
+            nowAnswertoNumber = "";
+            Informula = "";
+            notinbeforeEnter = false;
+}
+ d1 = new Decimal('5');
+              return d1;
+            }
+             if(d1 !== undefined && d2 === undefined && d8 === undefined)
+            {
+              d2 = new Decimal('5');
+              return d2;
+            }
+             if(d2 !== undefined && d3 === undefined && d8 === undefined)
+            {
+              d3 = new Decimal('5');
+              return d3;
+            }
+             if(d3 !== undefined && d4 === undefined && d8 === undefined)
+            {
+              d4 = new Decimal('5');
+              return d4;
+            }
+             if(d4 !== undefined && d5 === undefined && d8 === undefined)
+            {
+              d5 = new Decimal('5');
+              return d5;
+            }
+             if(d5 !== undefined && d6 === undefined && d8 === undefined)
+            {
+              d6 = new Decimal('5');
+              return d6;
+            }
+             if(d6 !== undefined && d7 === undefined && d8 === undefined)
+            {
+              d7 = new Decimal('5');
+              return d7;
+            }
+             if(d7 !== undefined && d8 === undefined)
+            {
+              d8 = new Decimal('5');
+              return d8;
+            }
+        }
+        clicked5();
+          /////////表示処理/////////
+render();
+        })
+    btn6.addEventListener('click', (event) =>
+        {
+          function clicked6()
+        {
+          if(d1 === undefined)
+            {
+if(keepbeforeans != undefined)
+{
+            clear();
+            nowAnswer = undefined;
+            keepbeforeans = undefined;
+            computeResult = undefined;
+            nownum.innerHTML = 0;
+            beforenum.innerHTML = "";
+            Resultin.innerHTML = "";
+            innumArray.splice(0);
+            computeMethodArray.length = 0;
+            karisiki = "";
+            nowAnswerString = "";
+            nowAnswertoNumber = "";
+            Informula = "";
+            notinbeforeEnter = false;
+}
+ d1 = new Decimal('6');
+              return d1;
+            }
+             if(d1 !== undefined && d2 === undefined && d8 === undefined)
+            {
+              d2 = new Decimal('6');
+              return d2;
+            }
+             if(d2 !== undefined && d3 === undefined && d8 === undefined)
+            {
+              d3 = new Decimal('6');
+              return d3;
+            }
+             if(d3 !== undefined && d4 === undefined && d8 === undefined)
+            {
+              d4 = new Decimal('6');
+              return d4;
+            }
+             if(d4 !== undefined && d5 === undefined && d8 === undefined)
+            {
+              d5 = new Decimal('6');
+              return d5;
+            }
+             if(d5 !== undefined && d6 === undefined && d8 === undefined)
+            {
+              d6 = new Decimal('6');
+              return d6;
+            }
+             if(d6 !== undefined && d7 === undefined && d8 === undefined)
+            {
+              d7 = new Decimal('6');
+              return d7;
+            }
+             if(d7 !== undefined && d8 === undefined)
+            {
+              d8 = new Decimal('6');
+              return d8;
+            }
+        }
+        clicked6();
+          /////////表示処理/////////
+render();
+        })
+    btn7.addEventListener('click', (event) =>
+        {
+          function clicked7()
+        {
+          if(d1 === undefined)
+            {
+if(keepbeforeans != undefined)
+{
+            clear();
+            nowAnswer = undefined;
+            keepbeforeans = undefined;
+            computeResult = undefined;
+            nownum.innerHTML = 0;
+            beforenum.innerHTML = "";
+            Resultin.innerHTML = "";
+            innumArray.splice(0);
+            computeMethodArray.length = 0;
+            karisiki = "";
+            nowAnswerString = "";
+            nowAnswertoNumber = "";
+            Informula = "";
+            notinbeforeEnter = false;
+}
+ d1 = new Decimal('7');
+              return d1;
+            }
+             if(d1 !== undefined && d2 === undefined && d8 === undefined)
+            {
+              d2 = new Decimal('7');
+              return d2;
+            }
+             if(d2 !== undefined && d3 === undefined && d8 === undefined)
+            {
+              d3 = new Decimal('7');
+              return d3;
+            }
+             if(d3 !== undefined && d4 === undefined && d8 === undefined)
+            {
+              d4 = new Decimal('7');
+              return d4;
+            }
+             if(d4 !== undefined && d5 === undefined && d8 === undefined)
+            {
+              d5 = new Decimal('7');
+              return d5;
+            }
+             if(d5 !== undefined && d6 === undefined && d8 === undefined)
+            {
+              d6 = new Decimal('7');
+              return d6;
+            }
+             if(d6 !== undefined && d7 === undefined && d8 === undefined)
+            {
+              d7 = new Decimal('7');
+              return d7;
+            }
+             if(d7 !== undefined && d8 === undefined)
+            {
+              d8 = new Decimal('7');
+              return d8;
+            }
+        }
+        clicked7();
+          /////////表示処理/////////
+render();
+        })
+    btn8.addEventListener('click', (event) =>
+        {
+          function clicked8()
+        {
+          if(d1 === undefined)
+            {
+if(keepbeforeans != undefined)
+{
+            clear();
+            nowAnswer = undefined;
+            keepbeforeans = undefined;
+            computeResult = undefined;
+            nownum.innerHTML = 0;
+            beforenum.innerHTML = "";
+            Resultin.innerHTML = "";
+            innumArray.splice(0);
+            computeMethodArray.length = 0;
+            karisiki = "";
+            nowAnswerString = "";
+            nowAnswertoNumber = "";
+            Informula = "";
+            notinbeforeEnter = false;
+}
+ d1 = new Decimal('8');
+              return d1;
+            }
+             if(d1 !== undefined && d2 === undefined && d8 === undefined)
+            {
+              d2 = new Decimal('8');
+              return d2;
+            }
+             if(d2 !== undefined && d3 === undefined && d8 === undefined)
+            {
+              d3 = new Decimal('8');
+              return d3;
+            }
+             if(d3 !== undefined && d4 === undefined && d8 === undefined)
+            {
+              d4 = new Decimal('8');
+              return d4;
+            }
+             if(d4 !== undefined && d5 === undefined && d8 === undefined)
+            {
+              d5 = new Decimal('8');
+              return d5;
+            }
+             if(d5 !== undefined && d6 === undefined && d8 === undefined)
+            {
+              d6 = new Decimal('8');
+              return d6;
+            }
+             if(d6 !== undefined && d7 === undefined && d8 === undefined)
+            {
+              d7 = new Decimal('8');
+              return d7;
+            }
+             if(d7 !== undefined && d8 === undefined)
+            {
+              d8 = new Decimal('8');
+              return d8;
+            }
+        }
+        clicked8();
+          /////////表示処理/////////
+render();
+        })
+    btn9.addEventListener('click', (event) =>
+        {
+          function clicked9()
+        {
+          if(d1 === undefined)
+            {
+if(keepbeforeans != undefined)
+{
+            clear();
+            nowAnswer = undefined;
+            keepbeforeans = undefined;
+            computeResult = undefined;
+            nownum.innerHTML = 0;
+            beforenum.innerHTML = "";
+            Resultin.innerHTML = "";
+            innumArray.splice(0);
+            computeMethodArray.length = 0;
+            karisiki = "";
+            nowAnswerString = "";
+            nowAnswertoNumber = "";
+            Informula = "";
+            notinbeforeEnter = false;
+}
+ d1 = new Decimal('9');
+              return d1;
+            }
+             if(d1 !== undefined && d2 === undefined && d8 === undefined)
+            {
+              d2 = new Decimal('9');
+              return d2;
+            }
+             if(d2 !== undefined && d3 === undefined && d8 === undefined)
+            {
+              d3 = new Decimal('9');
+              return d3;
+            }
+             if(d3 !== undefined && d4 === undefined && d8 === undefined)
+            {
+              d4 = new Decimal('9');
+              return d4;
+            }
+             if(d4 !== undefined && d5 === undefined && d8 === undefined)
+            {
+              d5 = new Decimal('9');
+              return d5;
+            }
+             if(d5 !== undefined && d6 === undefined && d8 === undefined)
+            {
+              d6 = new Decimal('9');
+              return d6;
+            }
+             if(d6 !== undefined && d7 === undefined && d8 === undefined)
+            {
+              d7 = new Decimal('9');
+              return d7;
+            }
+             if(d7 !== undefined && d8 === undefined)
+            {
+              d8 = new Decimal('9');
+              return d8;
+            }
+        }
+        clicked9();
+          /////////表示処理/////////
+render();
+        })
+    btn0.addEventListener('click', (event) =>
+        {
+          function clicked0()
+        {
+          if(d1 === undefined)
+            {
+if(keepbeforeans != undefined)
+{
+            clear();
+            nowAnswer = undefined;
+            keepbeforeans = undefined;
+            computeResult = undefined;
+            nownum.innerHTML = 0;
+            beforenum.innerHTML = "";
+            Resultin.innerHTML = "";
+            innumArray.splice(0);
+            computeMethodArray.length = 0;
+            karisiki = "";
+            nowAnswerString = "";
+            nowAnswertoNumber = "";
+            Informula = "";
+            notinbeforeEnter = false;
+}
+ d1 = new Decimal('0');
+              return d1;
+            }
+             if(d1 !== undefined && d2 === undefined && d8 === undefined)
+            {
+              d2 = new Decimal('0');
+              return d2;
+            }
+             if(d2 !== undefined && d3 === undefined && d8 === undefined)
+            {
+              d3 = new Decimal('0');
+              return d3;
+            }
+             if(d3 !== undefined && d4 === undefined && d8 === undefined)
+            {
+              d4 = new Decimal('0');
+              return d4;
+            }
+             if(d4 !== undefined && d5 === undefined && d8 === undefined)
+            {
+              d5 = new Decimal('0');
+              return d5;
+            }
+             if(d5 !== undefined && d6 === undefined && d8 === undefined)
+            {
+              d6 = new Decimal('0');
+              return d6;
+            }
+             if(d6 !== undefined && d7 === undefined && d8 === undefined)
+            {
+              d7 = new Decimal('0');
+              return d7;
+            }
+             if(d7 !== undefined && d8 === undefined)
+            {
+              d8 = new Decimal('0');
+              return d8;
+            }
+        }
+        clicked0();
+          /////////表示処理/////////
+render();
+        })
+    btnplus.addEventListener('click', (event) =>
+    {
+      computeMethod = 'plus';
+          if(computeMethod === "plus")
+          {
+            if(nowAnswer === undefined && keepbeforeans === undefined)
+            {
+              beforenum.innerHTML = "";  
+            }
+            if(nowAnswer === undefined)
+            {
+              computeMethod = "";
+            }
+            if(computeMethod === "plus")
+            {
+            if(innumArray.length === 0)
+            {
+              nowAnswertoNumber = nowAnswer.toNumber();
+              
+              if(thisnumbersqrt)
+              {
+                nowAnswer = Math.sqrt(nowAnswertoNumber);
+                thisnumbersqrt = false;
+              }
+              keepcompMethod = "plus";
+              if(thisnumberminus)
+              {
+                nowAnswertoNumber *= -1;
+              }
+              nowAnswerString = String(nowAnswertoNumber);
+              karisiki = nowAnswerString + "+";
+              innumArray.push(nowAnswer);
+              computeMethodArray.push("+");
+              keepcompMethod = "plus";
+              nowAnswer = undefined;
+              Informula = innumArray[0] + "+";
+              nownum.innerHTML = Informula;
+              thisnumberminus = false;
+              thisnumdecimalpoint = "";
+              clear();
+              //console.log(karisiki);
+            }
+              else
+              {
+                innumArray.push(nowAnswer);
+                computeMethodArray.push("+");
+                nowAnswertoNumber = nowAnswer.toNumber();
+                if(thisnumbersqrt)
+              {
+                nowAnswer = Math.sqrt(nowAnswertoNumber);
+                thisnumbersqrt = false;
+              }
+              if(thisnumberminus)
+              {
+                nowAnswertoNumber *= -1;
+              }
+              keepcompMethod = "plus";
+              //computeResult = keepbeforeans + nowAnswer;
+              Informula += innumArray[innumArray.length - 1] + "+";
+              nownum.innerHTML = Informula;
+
+              nowAnswerString = String(nowAnswertoNumber);
+              //console.log(nowAnswerString);
+              karisiki += nowAnswerString + "+";
+              //console.log(karisiki);
+              nowAnswer = undefined;
+              thisnumberminus = false;
+              thisnumdecimalpoint = "";
+
+              clear();
+              }         
+
+            }
+          }
+    })
+    btnminus.addEventListener('click', (event) =>
+    {
+      computeMethod = "minus";
+          if(computeMethod === "minus")
+          {
+            if(nowAnswer === undefined && keepbeforeans === undefined)
+            {
+              beforenum.innerHTML = "";  
+            }
+            if(nowAnswer === undefined)
+            {
+              computeMethod = "";
+            }
+            if(computeMethod === "minus")
+            {
+            if(innumArray.length === 0)
+            {
+
+              if(thisnumbersqrt)
+              {
+                nowAnswer = Math.sqrt(innumArray[0]);
+                thisnumbersqrt = false;
+              }
+              keepcompMethod = "minus";
+              if(thisnumberminus)
+              {
+                nowAnswer *= -1;
+              }
+              nowAnswertoNumber = nowAnswer.toNumber();
+              nowAnswerString = String(nowAnswertoNumber);
+              karisiki = nowAnswerString + "-";
+              innumArray.push(nowAnswer);
+              computeMethodArray.push("-");
+              keepcompMethod = "minus";
+              nowAnswer = undefined;
+              Informula = innumArray[0] + "-";
+              nownum.innerHTML = Informula;
+              thisnumberminus = false;
+              thisnumdecimalpoint = "";
+              clear();
+              //console.log(karisiki);
+            }
+              else
+              {
+                innumArray.push(nowAnswer);
+                computeMethodArray.push("-");
+                if(thisnumbersqrt)
+              {
+                nowAnswer = Math.sqrt(nowAnswertoNumber);
+                thisnumbersqrt = false;
+              }
+              if(thisnumberminus)
+              {
+                nowAnswertoNumber *= -1;
+              }
+              keepcompMethod = "minus";
+              //computeResult = keepbeforeans + nowAnswer;
+              Informula += innumArray[innumArray.length - 1] + "-";
+              nownum.innerHTML = Informula;
+              nowAnswertoNumber = nowAnswer.toNumber();
+              nowAnswerString = String(nowAnswertoNumber);
+              //console.log(nowAnswerString);
+              karisiki += nowAnswerString + "-";
+              //console.log(karisiki);
+              nowAnswer = undefined;
+              thisnumberminus = false;
+              thisnumdecimalpoint = "";
+
+              clear();
+              }         
+
+            }
+          }
+    })
+    btnmultiplication.addEventListener('click', (event) =>
+    {
+      computeMethod = 'multiplication';
+          if(computeMethod === "multiplication")
+          {
+            if(nowAnswer === undefined && keepbeforeans === undefined)
+            {
+              beforenum.innerHTML = "";  
+            }
+            if(nowAnswer === undefined)
+            {
+              computeMethod = "";
+            }
+            if(computeMethod === "multiplication")
+            {
+            if(innumArray.length === 0)
+            {
+
+              if(thisnumbersqrt)
+              {
+                nowAnswer = Math.sqrt(innumArray[0]);
+                thisnumbersqrt = false;
+              }
+              keepcompMethod = "multiplication";
+              if(thisnumberminus)
+              {
+                nowAnswer *= -1;
+              }
+              nowAnswertoNumber = nowAnswer.toNumber();
+              nowAnswerString = String(nowAnswertoNumber);
+              karisiki = nowAnswerString + "*";
+              innumArray.push(nowAnswer);
+              computeMethodArray.push("*");
+              keepcompMethod = "multiplication";
+              nowAnswer = undefined;
+              Informula = innumArray[0] + "✖";
+              nownum.innerHTML = Informula;
+              thisnumberminus = false;
+              thisnumdecimalpoint = "";
+              clear();
+              //console.log(karisiki);
+            }
+              else
+              {
+                innumArray.push(nowAnswer);
+                computeMethodArray.push("*");
+                if(thisnumbersqrt)
+              {
+                nowAnswer = Math.sqrt(nowAnswertoNumber);
+                thisnumbersqrt = false;
+              }
+              if(thisnumberminus)
+              {
+                nowAnswertoNumber *= -1;
+              }
+              keepcompMethod = "multiplication";
+              //computeResult = keepbeforeans + nowAnswer;
+              Informula += innumArray[innumArray.length - 1] + "✖";
+              nownum.innerHTML = Informula;
+              nowAnswertoNumber = nowAnswer.toNumber();
+              nowAnswerString = String(nowAnswertoNumber);
+              //console.log(nowAnswerString);
+              karisiki += nowAnswerString + "*";
+              //console.log(karisiki);
+              nowAnswer = undefined;
+              thisnumberminus = false;
+              thisnumdecimalpoint = "";
+
+              clear();
+              }         
+
+            }
+          }
+    })
+    btndivide.addEventListener('click', (event) =>
+    {
+      computeMethod = 'divide';
+          if(computeMethod === "divide")
+          {
+            if(nowAnswer === undefined && keepbeforeans === undefined)
+            {
+              beforenum.innerHTML = "";  
+            }
+            if(nowAnswer === undefined)
+            {
+              computeMethod = "";
+            }
+            if(computeMethod === "divide")
+            {
+            if(innumArray.length === 0)
+            {
+
+              if(thisnumbersqrt)
+              {
+                nowAnswer = Math.sqrt(innumArray[0]);
+                thisnumbersqrt = false;
+              }
+              keepcompMethod = "divide";
+              if(thisnumberminus)
+              {
+                nowAnswer *= -1;
+              }
+              nowAnswertoNumber = nowAnswer.toNumber();
+              nowAnswerString = String(nowAnswertoNumber);
+              karisiki = nowAnswerString + "/";
+              innumArray.push(nowAnswer);
+              computeMethodArray.push("/");
+              keepcompMethod = "divide";
+              nowAnswer = undefined;
+              Informula = innumArray[0] + "÷";
+              nownum.innerHTML = Informula;
+              thisnumberminus = false;
+              thisnumdecimalpoint = "";
+              clear();
+              //console.log(karisiki);
+            }
+              else
+              {
+                innumArray.push(nowAnswer);
+                computeMethodArray.push("/");
+                if(thisnumbersqrt)
+              {
+                nowAnswer = Math.sqrt(nowAnswertoNumber);
+                thisnumbersqrt = false;
+              }
+              if(thisnumberminus)
+              {
+                nowAnswertoNumber *= -1;
+              }
+              keepcompMethod = "divide";
+              //computeResult = keepbeforeans + nowAnswer;
+              Informula += innumArray[innumArray.length - 1] + "÷";
+              nownum.innerHTML = Informula;
+              nowAnswertoNumber = nowAnswer.toNumber();
+              nowAnswerString = String(nowAnswertoNumber);
+              //console.log(nowAnswerString);
+              karisiki += nowAnswerString + "/";
+              //console.log(karisiki);
+              nowAnswer = undefined;
+              thisnumberminus = false;
+              thisnumdecimalpoint = "";
+
+              clear();
+              }         
+
+            }
+          }
+    })
+    btnequal.addEventListener('click', (event) => 
+    {
+          nowAnswertoNumber = nowAnswer.toNumber();
+          nowAnswerString = String(nowAnswertoNumber);
+          karisiki += nowAnswerString;
+          //Informula = karisiki;
+          karisiki = eval(karisiki);
+          console.log(karisiki);
+          nownum.innerHTML = "=" + karisiki;
+          Informula += nowAnswerString;
+          keepbeforeans = Informula;
+          beforenum.innerHTML = keepbeforeans;
+          let formula = [];
+          formula.push(Informula);
+          console.log(formula);
+          notinbeforeEnter = true;
+          nowAnswer = undefined;
+          clear();
+        
+    })
+    btnthisnumminus.addEventListener('click', (event) =>
+    {
+      thisnumberminus = true;
+render();
+    })
+    btnsqrt.addEventListener ('click', (event) =>
+  {
+    thisnumbersqrt = true;
+render();
+  })
+    btndecimal.addEventListener('click', (event) =>
+    {
+      if(d1 === undefined)
+          {
+            if(thisnumberminus)
+            {
+              nownum.innerHTML = "-" + "0.";
+              nownum.innerHTML = "0.";
+            }
+            thisnumdecimalpoint = "";
+            thisnumdecimalpoint = "notinNum";
+            nownum.innerHTML = "0.";
+          }
+          else if(d1 !== undefined && d2 === undefined)
+          {
+            thisnumdecimalpoint = "";
+            thisnumdecimalpoint = "afterd1";
+          }
+          else if(d2 !== undefined && d3 === undefined)
+          {
+            thisnumdecimalpoint = "";
+            thisnumdecimalpoint = "afterd2";
+          }
+          else if(d3 !== undefined && d4 === undefined)
+          {
+            thisnumdecimalpoint = "";
+            thisnumdecimalpoint = "afterd3";
+          }
+          else if(d4 !== undefined && d5 === undefined)
+          {
+            thisnumdecimalpoint = "";
+            thisnumdecimalpoint = "afterd4";
+          }
+          else if(d5 !== undefined && d6 === undefined)
+          {
+            thisnumdecimalpoint = "";
+            thisnumdecimalpoint = "afterd5";
+          }
+          else if(d6 !== undefined && d7 === undefined)
+          {
+            thisnumdecimalpoint = "";
+            thisnumdecimalpoint = "afterd6";
+          }
+          else if(d7 !== undefined && d8 === undefined)
+          {
+            thisnumdecimalpoint = "";
+            thisnumdecimalpoint = "afterd7";
+          }
+          else if(d8 !== undefined)
+          {
+            thisnumdecimalpoint = "";
+          }
+    })
+</script>
+<style>
+    * {
+  margin:10px; padding:0;
+}
+header {
+  width: 100%;
+  padding: 15px 0;
+  margin: 0 auto;
+
+}
+header .headline{
+  font-size: 32px;
+}
+div.multiplication {
+  color :#785dc8;
+}
+div.equal {
+  color :#785dc8;
+}
+html {
+  background:linear-gradient(to right,rgb(165, 165, 165),rgb(51, 51, 51));
+}
+span.relaednum {
+  font-size: 35px;
+}
+button{
+  background-color:#02ffb7;
+  border:4px solid;
+  color: black;
+  border-color: rgba(0, 0, 0, 0.692);
+  font-size:20px;
+  font-weight:bold;
+  border-radius :4px;
+}
+</style>
+</body>
